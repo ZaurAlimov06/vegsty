@@ -1,0 +1,58 @@
+<resources>
+  <string name="app_name">Vegsty</string>
+
+  <!--    Onboard Screen-->
+  <string name="onboard_logo_icon_content_desc">Logo</string>
+  <string name="onboard_banner_icon_content_desc">Banner icon</string>
+  <string name="onboard_banner_title_text_find_recipes">Find Recipes</string>
+  <string name="onboard_banner_body_text_perfect_app">Perfect app to discover world of vegan/vegetarian cuisine and to hit your nutritional targets!</string>
+  <string name="onboard_button_get_started">Get Started</string>
+  <string name="onboard_text_already_have_account">Already Have An Acount?</string>
+  <string name="onboard_text_log_in">Log in</string>
+
+  <!--    Welcome Screen-->
+  <string name="welcome_title_text_welcome">Welcome</string>
+  <string name="welcome_text_terms_and_policy">By signing in you are agreeing our Term and privacy policy</string>
+  <string name="welcome_text_or_connect_with">or connect with</string>
+  <string name="welcome_google_icon_desc">Cart button icon</string>
+  <string name="welcome_text_sign_in_with_google">Sign in with Google</string>
+  <string name="welcome_switch_button_login">Login</string>
+  <string name="welcome_switch_button_register">Register</string>
+  <string name="welcome_login_label_email_address">Email address</string>
+  <string name="welcome_login_label_password">Password</string>
+  <string name="welcome_login_button_login">Login</string>
+  <string name="welcome_register_label_email_address">Email address</string>
+  <string name="welcome_register_label_password">Password</string>
+  <string name="welcome_register_label_password_again">Password again</string>
+  <string name="welcome_register_button_register">Register</string>
+
+  <!--    Restaurants Screen-->
+  <string name="restaurants_title_text_restaurants">Restaurants</string>
+
+  <!--    HomeSearch Screen-->
+
+  <!--    Goals Screen-->
+  <string name="goals_title_text_goals">Goals</string>
+
+  <!--    Favorites Screen-->
+  <string name="favorites_title_text_favorites">Favorites</string>
+
+  <!--    Profile Screen-->
+  <string name="profile_title_text_profile">Profile</string>
+  <string name="edit_profile_button">Edit profile</string>
+  <string name="settings">Settings</string>
+  <string name="terms_and_privacy_policy">Terms and Privacy Policy</string>
+  <string name="about_us">About us</string>
+  <string name="log_out">Log out</string>
+
+  <!--    AboutUs Screen-->
+  <string name="about_us_text">We Are Vegsty\n
+Providing you with a comprehensive platform that caters to the needs of vegan or vegetarian!\n
+At Vegsty, we understand the challenges that can arise when transitioning to a vegan or vegetarian lifestyle.
+Our mission is to make vegan and vegetarian living accessible, enjoyable, and sustainable for everyone.
+Our app offers a diverse range of recipes that are easy to prepare and meet your dietary preferences.
+With Vegsty, you can track your nutrient intake and receive tailored recommendations based on your dietary needs.
+Thank you for choosing Vegsty as your companion on your vegan or vegetarian journey. Let\'s embark on this exciting plant-based adventure together!</string>
+
+
+</resources>
