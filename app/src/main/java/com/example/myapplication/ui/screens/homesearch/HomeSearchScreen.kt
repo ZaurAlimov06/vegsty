@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -31,9 +32,20 @@ fun HomeSearchScreen(
   uiStateFlow: StateFlow<HomeUiState>,
   uiEventFlow: Flow<UiEvent>,
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
+  onEvent: (HomeUiEvent) -> Unit,
   spacing: Dimension = LocalSpacing.current
 ) {
   val uiState by uiStateFlow.collectAsState()
+
+  LaunchedEffect(true) {
+    uiEventFlow.collect { event ->
+      when (event) {
+        is UiEvent.Navigate<*> -> {
+          onNavigate(event.navigationType, event.data)
+        }
+      }
+    }
+  }
 
   LazyColumn(
     modifier = Modifier
@@ -49,7 +61,7 @@ fun HomeSearchScreen(
       RecipeListItem(
         recipe = uiState.recipeList[index],
         onRecipeClick = {
-
+          onEvent(HomeUiEvent.OnRecipeClick(it))
         }
       )
     }
@@ -70,7 +82,8 @@ fun PreviewHomeSearchScreen() {
         )
       ),
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
-      onNavigate = { _, _ -> }
+      onNavigate = { _, _ -> },
+      onEvent = {}
     )
   }
 }

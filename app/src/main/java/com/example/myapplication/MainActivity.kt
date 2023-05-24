@@ -20,9 +20,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.data.remote.dto.Recipe
 import com.example.myapplication.ui.components.BottomBar
 import com.example.myapplication.ui.route.NavigationType
 import com.example.myapplication.ui.route.Route
+import com.example.myapplication.ui.route.RouteArgument
+import com.example.myapplication.ui.screens.detail.DetailScreen
 import com.example.myapplication.ui.screens.favorites.FavoritesScreen
 import com.example.myapplication.ui.screens.favorites.FavoritesViewModel
 import com.example.myapplication.ui.screens.goals.main.GoalsScreen
@@ -141,6 +144,19 @@ class MainActivity : ComponentActivity() {
               HomeSearchScreen(
                 uiStateFlow = homeSearchViewModel.uiState,
                 uiEventFlow = homeSearchViewModel.uiEvent,
+                onNavigate = { navigationType, data ->
+                  navController.handleNavigation(navigationType, data)
+                },
+                onEvent = {
+                  homeSearchViewModel.onEvent(it)
+                }
+              )
+            }
+
+            composable(Route.SCREEN_HOME_RECIPE_DETAIL.name) { currentStackEntry ->
+
+              DetailScreen(
+                recipe = currentStackEntry.savedStateHandle.get<Recipe>(RouteArgument.ARG_HOME_RECIPE_DETAIL.name),
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
                 }

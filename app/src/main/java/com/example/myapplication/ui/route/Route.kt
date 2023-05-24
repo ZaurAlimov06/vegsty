@@ -11,7 +11,8 @@ enum class Route(
   SCREEN_FAVORITES(hasBottomBar = true),
   SCREEN_GOALS(hasBottomBar = true),
   SCREEN_RESTAURANTS(hasBottomBar = true),
-  SCREEN_PROFILE(hasBottomBar = true)
+  SCREEN_PROFILE(hasBottomBar = true),
+  SCREEN_HOME_RECIPE_DETAIL
   ;
 
   companion object {

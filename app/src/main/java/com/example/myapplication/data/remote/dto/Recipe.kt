@@ -1,5 +1,9 @@
 package com.example.myapplication.data.remote.dto
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Recipe(
   val id: Long,
   val imgUrl: String,
@@ -9,4 +13,4 @@ data class Recipe(
   val calorie: Int,
   val fat: Int,
   val carbs: Int
-)
+):Parcelable
