@@ -74,6 +74,9 @@ dependencies {
   implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
   implementation("com.google.dagger:hilt-android:2.44")
   implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.squareup.okhttp3:okhttp:4.10.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
   debugImplementation("androidx.compose.ui:ui-tooling")
   debugImplementation("androidx.compose.ui:ui-test-manifest")

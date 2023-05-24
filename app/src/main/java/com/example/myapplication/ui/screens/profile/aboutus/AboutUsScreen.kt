@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.profile.details
+package com.example.myapplication.ui.screens.profile.aboutus
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

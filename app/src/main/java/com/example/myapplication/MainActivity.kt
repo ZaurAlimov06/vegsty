@@ -31,7 +31,7 @@ import com.example.myapplication.ui.screens.homesearch.HomeSearchScreen
 import com.example.myapplication.ui.screens.homesearch.HomeSearchViewModel
 import com.example.myapplication.ui.screens.onboard.OnboardScreen
 import com.example.myapplication.ui.screens.onboard.OnboardViewModel
-import com.example.myapplication.ui.screens.profile.details.AboutUsScreen
+import com.example.myapplication.ui.screens.profile.aboutus.AboutUsScreen
 import com.example.myapplication.ui.screens.profile.main.ProfileScreen
 import com.example.myapplication.ui.screens.profile.main.ProfileViewModel
 import com.example.myapplication.ui.screens.restaurants.RestaurantScreen
@@ -139,6 +139,7 @@ class MainActivity : ComponentActivity() {
               val homeSearchViewModel: HomeSearchViewModel = hiltViewModel()
 
               HomeSearchScreen(
+                uiStateFlow = homeSearchViewModel.uiState,
                 uiEventFlow = homeSearchViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
