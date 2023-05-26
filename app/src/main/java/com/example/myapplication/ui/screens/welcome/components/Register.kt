@@ -28,6 +28,9 @@ fun Register(
   onPassAgainToggleStateChange: (Boolean) -> Unit,
   passAgainVisibilityState: Boolean
 ) {
+  var usernameStateRegister by remember {
+    mutableStateOf("")
+  }
   var emailStateRegister by remember {
     mutableStateOf("")
   }
@@ -40,13 +43,37 @@ fun Register(
 
   Column {
     OutlinedTextField(
+      value = usernameStateRegister,
+      label = { Text(stringResource(id = R.string.welcome_register_label_username)) },
+      onValueChange = {
+        usernameStateRegister = it
+      },
+      modifier = Modifier
+        .padding(top = 20.dp)
+        .fillMaxWidth(),
+      leadingIcon = {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_username),
+          contentDescription = stringResource(id = R.string.common_icon_content_description),
+          tint = MaterialTheme.colorScheme.onBackground
+        )
+      },
+      singleLine = true,
+      maxLines = 1,
+      colors = TextFieldDefaults.outlinedTextFieldColors(
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+      ),
+    )
+
+    OutlinedTextField(
       value = emailStateRegister,
       label = { Text(stringResource(id = R.string.welcome_register_label_email_address)) },
       onValueChange = {
         emailStateRegister = it
       },
       modifier = Modifier
-        .padding(top = 20.dp)
+        .padding(top = 5.dp)
         .fillMaxWidth(),
       leadingIcon = {
         Icon(
