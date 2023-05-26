@@ -3,7 +3,6 @@ package com.example.myapplication.ui.screens.welcome
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,16 +21,18 @@ import com.example.myapplication.ui.screens.welcome.components.Login
 import com.example.myapplication.ui.screens.welcome.components.Register
 import com.example.myapplication.ui.screens.welcome.components.WelcomeSwitch
 import com.example.myapplication.ui.theme.Dimension
-import com.example.myapplication.ui.theme.HalfBlackColor
 import com.example.myapplication.ui.theme.LocalSpacing
 import com.example.myapplication.ui.theme.VegstyTheme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @ExperimentalMaterial3Api
 @Composable
 fun WelcomeScreen(
+  uiStateFlow: StateFlow<WelcomeUiState>,
   uiEventFlow: Flow<UiEvent>,
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
   onEvent: (WelcomeScreenUiEvent) -> Unit,
@@ -41,12 +42,15 @@ fun WelcomeScreen(
     mutableStateOf(true)
   }
 
+  val uiState by uiStateFlow.collectAsState()
+
   LaunchedEffect(true) {
     uiEventFlow.collect { event ->
       when (event) {
         is UiEvent.Navigate<*> -> {
           onNavigate(event.navigationType, event.data)
         }
+        else -> {}
       }
     }
   }
@@ -75,7 +79,7 @@ fun WelcomeScreen(
         modifier = Modifier
           .padding(top = 15.dp, start = 40.dp, end = 40.dp),
         style = MaterialTheme.typography.bodyLarge,
-        color = HalfBlackColor
+        color = MaterialTheme.colorScheme.onBackground
       )
 
       WelcomeSwitch(
@@ -89,13 +93,25 @@ fun WelcomeScreen(
         Login(
           onLoginClick = {
             onEvent(WelcomeScreenUiEvent.OnLoginClick)
-          }
+          },
+          onPassToggleStateChange = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateLoginPassVisibility(it))
+          },
+          passVisibilityState = uiState.isLoginPassVisible
         )
       } else {
         Register(
           onRegisterClick = {
             onEvent(WelcomeScreenUiEvent.OnRegisterClick)
-          }
+          },
+          onPassToggleStateChange = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateRegisterPassVisibility(it))
+          },
+          passVisibilityState = uiState.isRegisterPassVisible,
+          onPassAgainToggleStateChange = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateRegisterAgainPassVisibility(it))
+          },
+          passAgainVisibilityState = uiState.isRegisterAgainPassVisible
         )
       }
 
@@ -103,28 +119,29 @@ fun WelcomeScreen(
         text = stringResource(id = R.string.welcome_text_or_connect_with),
         textAlign = TextAlign.Center,
         modifier = Modifier
-          .padding(top = 15.dp),
+          .padding(top = 16.dp),
         style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onBackground
       )
 
       Button(
         onClick = {},
         modifier = Modifier
-          .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(Color.White)
+          .fillMaxWidth()
+          .padding(top = 16.dp),
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
       ) {
         Icon(
-          painterResource(id = R.drawable.ic_google_logo),
-          contentDescription = stringResource(id = R.string.welcome_google_icon_desc),
-          tint = Color.Unspecified,
-          modifier = Modifier.size(50.dp)
+          painter = painterResource(id = R.drawable.ic_google_logo),
+          contentDescription = stringResource(id = R.string.common_icon_content_description),
+          tint = Color.Unspecified
         )
 
         Text(
           text = stringResource(id = R.string.welcome_text_sign_in_with_google),
-          Modifier.padding(start = 10.dp),
-          color = Color.Gray,
-          style = MaterialTheme.typography.titleMedium
+          modifier = Modifier.padding(start = 10.dp),
+          color = MaterialTheme.colorScheme.onBackground,
+          style = MaterialTheme.typography.bodyLarge
         )
       }
     }
@@ -137,6 +154,9 @@ fun WelcomeScreen(
 fun PreviewWelcomeScreen() {
   VegstyTheme {
     WelcomeScreen(
+      uiStateFlow = MutableStateFlow(
+        WelcomeUiState()
+      ),
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
       onNavigate = { _, _ -> },
       onEvent = {}

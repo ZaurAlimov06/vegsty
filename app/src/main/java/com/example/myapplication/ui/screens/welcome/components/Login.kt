@@ -7,20 +7,23 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
+import com.example.myapplication.ui.components.IconPasswordVisibility
 import com.example.myapplication.ui.theme.VegstyTheme
-import com.example.myapplication.ui.theme.WhiteColor
 
 @ExperimentalMaterial3Api
 @Composable
 fun Login(
-  onLoginClick: () -> Unit
+  onLoginClick: () -> Unit,
+  onPassToggleStateChange: (Boolean) -> Unit,
+  passVisibilityState: Boolean
 ) {
   var emailStateLogin by remember {
     mutableStateOf("")
@@ -37,7 +40,20 @@ fun Login(
       },
       modifier = Modifier
         .padding(top = 20.dp)
-        .fillMaxWidth()
+        .fillMaxWidth(),
+      leadingIcon = {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_mail),
+          contentDescription = stringResource(id = R.string.common_icon_content_description),
+          tint = MaterialTheme.colorScheme.onBackground
+        )
+      },
+      colors = TextFieldDefaults.outlinedTextFieldColors(
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+      ),
+      singleLine = true,
+      maxLines = 1
     )
 
     OutlinedTextField(
@@ -49,8 +65,32 @@ fun Login(
       modifier = Modifier
         .padding(top = 5.dp)
         .fillMaxWidth(),
-      visualTransformation = PasswordVisualTransformation(),
+      visualTransformation = if (passVisibilityState) {
+        VisualTransformation.None
+      } else {
+        PasswordVisualTransformation()
+      },
       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+      leadingIcon = {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_lock),
+          contentDescription = stringResource(id = R.string.common_icon_content_description),
+          tint = MaterialTheme.colorScheme.onBackground
+        )
+      },
+      trailingIcon = {
+        IconPasswordVisibility(
+          onStateChange = {
+            onPassToggleStateChange(it)
+          }
+        )
+      },
+      colors = TextFieldDefaults.outlinedTextFieldColors(
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+      ),
+      singleLine = true,
+      maxLines = 1
     )
 
     Button(
@@ -62,13 +102,13 @@ fun Login(
         .padding(top = 20.dp),
       colors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = WhiteColor
+        contentColor = MaterialTheme.colorScheme.onPrimary
       ),
       shape = MaterialTheme.shapes.extraLarge
     ) {
       Text(
         text = stringResource(id = R.string.welcome_login_button_login),
-        color = Color.White,
+        color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.titleLarge
       )
     }
@@ -81,7 +121,9 @@ fun Login(
 fun PreviewLogin() {
   VegstyTheme {
     Login(
-      onLoginClick = {}
+      onLoginClick = {},
+      onPassToggleStateChange = {},
+      passVisibilityState = true
     )
   }
 }

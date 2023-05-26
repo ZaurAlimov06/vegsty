@@ -2,6 +2,7 @@ package com.example.myapplication.ui.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.data.local.ProfileLocal
 import com.example.myapplication.ui.model.ExceptionHandler
 import com.example.myapplication.ui.model.UiEvent
 import com.example.myapplication.ui.route.NavigationType
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
+  private val profileLocal: ProfileLocal
 ) : ViewModel() {
   private val _uiEvent = Channel<UiEvent>()
   val uiEvent = _uiEvent.receiveAsFlow()
@@ -26,11 +28,22 @@ class SplashViewModel @Inject constructor(
   private fun startSplashTimer() {
     viewModelScope.launch(ExceptionHandler.handler) {
       delay(1000L)
+
+      onChangeTheme(profileLocal.getTheme())
+
       _uiEvent.send(
         UiEvent.Navigate(
           navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_FIRST.name),
           data = mapOf<String, Any>()
         )
+      )
+    }
+  }
+
+  private fun onChangeTheme(isDark: Boolean) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(
+        UiEvent.ChangeTheme(isDark)
       )
     }
   }

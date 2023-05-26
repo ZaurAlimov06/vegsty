@@ -23,10 +23,24 @@ class OnboardViewModel @Inject constructor(
       is OnboardScreenUiEvent.OnGetStartedClick -> {
         onGetStartedClick()
       }
+      is OnboardScreenUiEvent.OnLogInClick -> {
+        onLogInClick()
+      }
     }
   }
 
   private fun onGetStartedClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_WELCOME.name),
+          data = mapOf<String, Any>()
+        )
+      )
+    }
+  }
+
+  private fun onLogInClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(
         UiEvent.Navigate(

@@ -17,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.ui.model.UiEvent
 import com.example.myapplication.ui.route.NavigationType
-import com.example.myapplication.ui.theme.*
+import com.example.myapplication.ui.theme.Dimension
+import com.example.myapplication.ui.theme.LocalSpacing
+import com.example.myapplication.ui.theme.VegstyTheme
+import com.example.myapplication.ui.theme.WhiteColor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -35,6 +38,7 @@ fun OnboardScreen(
         is UiEvent.Navigate<*> -> {
           onNavigate(event.navigationType, event.data)
         }
+        else -> {}
       }
     }
   }
@@ -55,7 +59,7 @@ fun OnboardScreen(
           .padding(top = 30.dp),
         tint = Color.Unspecified,
         painter = painterResource(id = R.drawable.ic_logo_green),
-        contentDescription = stringResource(id = R.string.onboard_logo_icon_content_desc)
+        contentDescription = stringResource(id = R.string.common_icon_content_description)
       )
 
       Icon(
@@ -64,7 +68,7 @@ fun OnboardScreen(
           .padding(top = 20.dp),
         tint = Color.Unspecified,
         painter = painterResource(id = R.drawable.ic_onboard_banner),
-        contentDescription = stringResource(id = R.string.onboard_banner_icon_content_desc)
+        contentDescription = stringResource(id = R.string.common_icon_content_description)
       )
 
       Text(
@@ -84,7 +88,7 @@ fun OnboardScreen(
           .fillMaxWidth()
           .padding(start = 20.dp, end = 20.dp, top = 20.dp),
         style = MaterialTheme.typography.bodyLarge,
-        color = HalfBlackColor
+        color = MaterialTheme.colorScheme.onBackground
       )
 
       Button(
@@ -96,13 +100,13 @@ fun OnboardScreen(
           .padding(top = 20.dp, start = 12.dp, end = 12.dp),
         colors = ButtonDefaults.buttonColors(
           containerColor = MaterialTheme.colorScheme.primary,
-          contentColor = WhiteColor
+          contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = MaterialTheme.shapes.large
       ) {
         Text(
           modifier = Modifier
-            .padding(top = 20.dp, bottom = 20.dp),
+            .padding(top = 12.dp, bottom = 12.dp),
           text = stringResource(id = R.string.onboard_button_get_started),
           style = MaterialTheme.typography.titleLarge,
           color = WhiteColor
@@ -121,7 +125,7 @@ fun OnboardScreen(
           modifier = Modifier
             .clickable { },
           style = MaterialTheme.typography.bodyLarge,
-          color = HalfBlackColor
+          color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
@@ -129,8 +133,13 @@ fun OnboardScreen(
           textAlign = TextAlign.Center,
           color = MaterialTheme.colorScheme.primary,
           modifier = Modifier
-            .padding(start = 5.dp),
-          style = MaterialTheme.typography.bodyLarge,
+            .padding(start = 5.dp)
+            .clickable(
+              onClick = {
+                onEvent(OnboardScreenUiEvent.OnLogInClick)
+              }
+            ),
+          style = MaterialTheme.typography.bodyLarge
         )
       }
     }

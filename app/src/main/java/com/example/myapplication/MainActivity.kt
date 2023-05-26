@@ -5,15 +5,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -37,14 +42,18 @@ import com.example.myapplication.ui.screens.onboard.OnboardViewModel
 import com.example.myapplication.ui.screens.profile.aboutus.AboutUsScreen
 import com.example.myapplication.ui.screens.profile.main.ProfileScreen
 import com.example.myapplication.ui.screens.profile.main.ProfileViewModel
+import com.example.myapplication.ui.screens.profile.settings.SettingsScreen
+import com.example.myapplication.ui.screens.profile.settings.SettingsViewModel
 import com.example.myapplication.ui.screens.restaurants.RestaurantScreen
 import com.example.myapplication.ui.screens.restaurants.RestaurantViewModel
 import com.example.myapplication.ui.screens.splash.SplashScreen
 import com.example.myapplication.ui.screens.splash.SplashViewModel
 import com.example.myapplication.ui.screens.welcome.WelcomeScreen
 import com.example.myapplication.ui.screens.welcome.WelcomeViewModel
+import com.example.myapplication.ui.theme.DarkBackgroundColor
 import com.example.myapplication.ui.theme.PrimaryColor
 import com.example.myapplication.ui.theme.VegstyTheme
+import com.example.myapplication.ui.theme.WhiteColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,16 +72,30 @@ class MainActivity : ComponentActivity() {
       val backStackEntry by navController.currentBackStackEntryAsState()
       val currentScreenRoute: Route? = Route.getRoute(backStackEntry?.destination?.route)
 
-      val view = LocalView.current
-      SideEffect {
-        val window = (view.context as Activity).window
-        window.statusBarColor = PrimaryColor.toArgb()
+      val isThemeDark = remember {
+        mutableStateOf(false)
       }
 
-      VegstyTheme {
+      val statusBarColor = remember {
+        mutableStateOf(PrimaryColor)
+      }
+
+      val view = LocalView.current
+
+      SideEffect {
+        (view.context as Activity).window.apply {
+          window.statusBarColor = statusBarColor.value.toArgb()
+          WindowCompat.getInsetsController(this, view).isAppearanceLightStatusBars = !isThemeDark.value
+        }
+      }
+
+      VegstyTheme(
+        darkTheme = isThemeDark.value
+      ) {
         Scaffold(
           modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
           bottomBar = {
             BottomBar(
               route = currentScreenRoute,
@@ -95,6 +118,14 @@ class MainActivity : ComponentActivity() {
                 uiEventFlow = splashViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
+                },
+                onChangeTheme = {
+                  isThemeDark.value = it
+                  statusBarColor.value = if (it) {
+                    DarkBackgroundColor
+                  } else {
+                    WhiteColor
+                  }
                 }
               )
             }
@@ -117,6 +148,7 @@ class MainActivity : ComponentActivity() {
               val welcomeViewModel: WelcomeViewModel = hiltViewModel()
 
               WelcomeScreen(
+                uiStateFlow = welcomeViewModel.uiState,
                 uiEventFlow = welcomeViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
@@ -198,10 +230,31 @@ class MainActivity : ComponentActivity() {
                 }
               )
             }
+
             composable(Route.SCREEN_ABOUT_US.name) {
+              AboutUsScreen()
+            }
 
-              AboutUsScreen(
+            composable(Route.SCREEN_SETTINGS.name) {
+              val settingsViewModel: SettingsViewModel = hiltViewModel()
 
+              SettingsScreen(
+                uiStateFlow = settingsViewModel.uiState,
+                uiEventFlow = settingsViewModel.uiEvent,
+                onNavigate = { navigationType, data ->
+                  navController.handleNavigation(navigationType, data)
+                },
+                onChangeTheme = {
+                  isThemeDark.value = it
+                  statusBarColor.value = if (it) {
+                    DarkBackgroundColor
+                  } else {
+                    WhiteColor
+                  }
+                },
+                onEvent = {
+                  settingsViewModel.onEvent(it)
+                }
               )
             }
           }
@@ -242,7 +295,7 @@ class MainActivity : ComponentActivity() {
         }
 
         is NavigationType.BottomBarNavigate -> {
-          popUpTo(Route.SCREEN_RESTAURANTS.name) {
+          popUpTo(Route.SCREEN_SEARCH.name) {
             saveState = true
           }
           launchSingleTop = true

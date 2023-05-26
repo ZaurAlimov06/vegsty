@@ -2,17 +2,13 @@ package com.example.myapplication.ui.screens.homesearch
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.data.remote.dto.Recipe
 import com.example.myapplication.ui.components.RecipeListItem
@@ -43,6 +39,7 @@ fun HomeSearchScreen(
         is UiEvent.Navigate<*> -> {
           onNavigate(event.navigationType, event.data)
         }
+        else -> {}
       }
     }
   }

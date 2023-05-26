@@ -27,16 +27,17 @@ import com.example.myapplication.ui.theme.VegstyTheme
 fun AboutUsScreen(
   spacing: Dimension = LocalSpacing.current
 ) {
-  Column {
+  Column(
+    modifier = Modifier
+      .padding(
+        horizontal = spacing.spaceScreenHorizontalPadding,
+        vertical = spacing.spaceScreenVerticalPadding
+      )
+  ) {
     LazyColumn(
       modifier = Modifier
         .fillMaxSize()
-        .padding(
-          horizontal = spacing.spaceScreenHorizontalPadding,
-          vertical = spacing.spaceScreenVerticalPadding
-        )
         .weight(1.0f),
-
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -47,9 +48,8 @@ fun AboutUsScreen(
             .padding(top = 50.dp),
           tint = Color.Unspecified,
           painter = painterResource(id = R.drawable.ic_logo_green),
-          contentDescription = stringResource(id = R.string.onboard_logo_icon_content_desc)
+          contentDescription = stringResource(id = R.string.common_icon_content_description)
         )
-
 
         Text(
           text = stringResource(id = R.string.about_us_text),
@@ -59,7 +59,6 @@ fun AboutUsScreen(
             .padding(top = 20.dp),
           style = MaterialTheme.typography.bodyMedium,
         )
-
       }
     }
     Text(
@@ -77,8 +76,6 @@ fun AboutUsScreen(
 @Preview(showBackground = true)
 fun PreviewAboutUsScreen() {
   VegstyTheme {
-    AboutUsScreen(
-
-    )
+    AboutUsScreen()
   }
 }

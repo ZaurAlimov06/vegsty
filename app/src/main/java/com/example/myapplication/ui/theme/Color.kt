@@ -6,6 +6,8 @@ val PrimaryColor = Color(0xFF91C788)
 val SecondaryColor = Color(0xFFE9F6E7)
 val TertiaryColor = Color(0xFFFF8473)
 
+val DarkBackgroundColor = Color(0xFF121212)
+
 val WhiteColor = Color(0xFFFFFFFF)
 val BlackColor = Color(0xFF000000)
 val HalfBlackColor = Color(0x80000000)

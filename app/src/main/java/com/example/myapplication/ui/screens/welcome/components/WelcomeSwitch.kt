@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,9 +44,9 @@ fun WelcomeSwitch(
           ),
         style = MaterialTheme.typography.bodyMedium,
         color = if (welcomeState) {
-          Color.Green
+          MaterialTheme.colorScheme.primary
         } else {
-          Color.Black
+          MaterialTheme.colorScheme.onBackground
         },
       )
 
@@ -56,7 +55,7 @@ fun WelcomeSwitch(
       Spacer(
         modifier = Modifier
           .height(1.dp)
-          .background(Color.Black)
+          .background(MaterialTheme.colorScheme.primary)
       )
     }
 
@@ -76,9 +75,9 @@ fun WelcomeSwitch(
           ),
         style = MaterialTheme.typography.bodyMedium,
         color = if (welcomeState) {
-          Color.Black
+          MaterialTheme.colorScheme.onBackground
         } else {
-          Color.Green
+          MaterialTheme.colorScheme.primary
         }
       )
 
@@ -87,7 +86,7 @@ fun WelcomeSwitch(
       Spacer(
         modifier = Modifier
           .height(1.dp)
-          .background(Color.Black)
+          .background(MaterialTheme.colorScheme.primary)
       )
     }
   }

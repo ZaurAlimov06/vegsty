@@ -17,10 +17,23 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
   private val _uiEvent = Channel<UiEvent>()
   val uiEvent = _uiEvent.receiveAsFlow()
+
   fun onEvent(profileUiEvent: ProfileUiEvent) {
     when (profileUiEvent) {
       ProfileUiEvent.OnAboutUsClick -> {
         onAboutUsClick()
+      }
+      is ProfileUiEvent.OnEditProfileClick -> {
+        onEditProfileClick()
+      }
+      is ProfileUiEvent.OnLogOutClick -> {
+        onLogOutClick()
+      }
+      is ProfileUiEvent.OnSettingsClick -> {
+        onSettingsClick()
+      }
+      is ProfileUiEvent.OnTermsClick -> {
+        onTermsClick()
       }
     }
   }
@@ -33,6 +46,35 @@ class ProfileViewModel @Inject constructor(
           data = mapOf<String, Any>()
         )
       )
+    }
+  }
+
+  private fun onEditProfileClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+
+    }
+  }
+
+  private fun onLogOutClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+
+    }
+  }
+
+  private fun onSettingsClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.Navigate(Route.SCREEN_SETTINGS.name),
+          data = mapOf<String, Any>()
+        )
+      )
+    }
+  }
+
+  private fun onTermsClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+
     }
   }
 }
