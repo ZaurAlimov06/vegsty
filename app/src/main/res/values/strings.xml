@@ -54,6 +54,7 @@ Thank you for choosing Vegsty as your companion on your vegan or vegetarian jour
 
 
   <!--    Settings Screen-->
+  <string name="settings_title_text_profile">Settings</string>
   <string name="settings_text_toggle_theme">Toggle theme</string>
 
   <!--    Common Strings-->

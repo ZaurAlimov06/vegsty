@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.welcome.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -9,11 +8,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.ui.theme.PrimaryColor
 import com.example.myapplication.ui.theme.VegstyTheme
 
 @Composable
@@ -29,66 +32,70 @@ fun WelcomeSwitch(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center
   ) {
-    Column {
-      Text(
-        text = stringResource(id = R.string.welcome_switch_button_login),
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .clickable(
-            interactionSource = MutableInteractionSource(),
-            indication = null,
-            onClick = {
-              welcomeStateChange(true)
+    Text(
+      text = stringResource(id = R.string.welcome_switch_button_login),
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .clickable(
+          interactionSource = MutableInteractionSource(),
+          indication = null,
+          onClick = {
+            welcomeStateChange(true)
 
-            }
-          ),
-        style = MaterialTheme.typography.bodyMedium,
-        color = if (welcomeState) {
-          MaterialTheme.colorScheme.primary
-        } else {
-          MaterialTheme.colorScheme.onBackground
+          }
+        )
+        .drawBehind {
+          if (welcomeState) {
+            val strokeWidthPx = 1.dp.toPx()
+            val verticalOffset = size.height + 2.sp.toPx()
+            drawLine(
+              color = PrimaryColor,
+              strokeWidth = strokeWidthPx,
+              start = Offset(0f, verticalOffset),
+              end = Offset(size.width, verticalOffset)
+            )
+          }
         },
-      )
-
-      Spacer(modifier = Modifier.height(2.dp))
-
-      Spacer(
-        modifier = Modifier
-          .height(1.dp)
-          .background(MaterialTheme.colorScheme.primary)
-      )
-    }
+      style = MaterialTheme.typography.bodyMedium,
+      color = if (welcomeState) {
+        MaterialTheme.colorScheme.primary
+      } else {
+        MaterialTheme.colorScheme.onBackground
+      },
+    )
 
     Spacer(modifier = Modifier.width(30.dp))
 
-    Column {
-      Text(
-        text = stringResource(id = R.string.welcome_switch_button_register),
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .clickable(
-            interactionSource = MutableInteractionSource(),
-            indication = null,
-            onClick = {
-              welcomeStateChange(false)
-            }
-          ),
-        style = MaterialTheme.typography.bodyMedium,
-        color = if (welcomeState) {
-          MaterialTheme.colorScheme.onBackground
-        } else {
-          MaterialTheme.colorScheme.primary
-        }
-      )
-
-      Spacer(modifier = Modifier.height(2.dp))
-
-      Spacer(
-        modifier = Modifier
-          .height(1.dp)
-          .background(MaterialTheme.colorScheme.primary)
-      )
-    }
+    Text(
+      text = stringResource(id = R.string.welcome_switch_button_register),
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .clickable(
+          interactionSource = MutableInteractionSource(),
+          indication = null,
+          onClick = {
+            welcomeStateChange(false)
+          }
+        )
+        .drawBehind {
+          if (!welcomeState) {
+            val strokeWidthPx = 1.dp.toPx()
+            val verticalOffset = size.height + 2.sp.toPx()
+            drawLine(
+              color = PrimaryColor,
+              strokeWidth = strokeWidthPx,
+              start = Offset(0f, verticalOffset),
+              end = Offset(size.width, verticalOffset)
+            )
+          }
+        },
+      style = MaterialTheme.typography.bodyMedium,
+      color = if (!welcomeState) {
+        MaterialTheme.colorScheme.primary
+      } else {
+        MaterialTheme.colorScheme.onBackground
+      }
+    )
   }
 }
 
