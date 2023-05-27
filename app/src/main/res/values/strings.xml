@@ -28,6 +28,7 @@
   <string name="restaurants_title_text_restaurants">Restaurants</string>
 
   <!--    HomeSearch Screen-->
+  <string name="homesearch_label_search">Search recipes, articles, people…</string>
 
   <!--    Goals Screen-->
   <string name="goals_title_text_goals">Goals</string>
