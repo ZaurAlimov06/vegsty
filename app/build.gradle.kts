@@ -4,14 +4,15 @@ plugins {
   id("kotlin-kapt")
   id("com.google.dagger.hilt.android")
   id("kotlin-parcelize")
+  id("com.google.gms.google-services")
 }
 
 android {
-  namespace = "com.example.myapplication"
+  namespace = "com.app.vegsty"
   compileSdk = 33
 
   defaultConfig {
-    applicationId = "com.example.myapplication"
+    applicationId = "com.app.vegsty"
     minSdk = 26
     targetSdk = 33
     versionCode = 1
@@ -61,10 +62,11 @@ android {
 }
 
 dependencies {
+  implementation(platform("androidx.compose:compose-bom:2022.10.00"))
+  implementation(platform("com.google.firebase:firebase-bom:32.1.0"))
   implementation("androidx.core:core-ktx:1.7.20")
   implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
   implementation("androidx.activity:activity-compose:1.5.1")
-  implementation(platform("androidx.compose:compose-bom:2022.10.00"))
   implementation("androidx.compose.ui:ui")
   implementation("androidx.compose.ui:ui-graphics")
   implementation("androidx.compose.ui:ui-tooling-preview")
@@ -79,6 +81,7 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.10.0")
   implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
   implementation("androidx.security:security-crypto:1.0.0")
+  implementation("com.google.firebase:firebase-auth-ktx")
 
   debugImplementation("androidx.compose.ui:ui-tooling")
   debugImplementation("androidx.compose.ui:ui-test-manifest")

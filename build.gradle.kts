@@ -5,6 +5,17 @@ plugins {
   id("com.google.dagger.hilt.android") version "2.44" apply false
 }
 
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath("com.google.gms:google-services:4.3.15")
+  }
+}
+
 
 subprojects {
   configurations.all {
