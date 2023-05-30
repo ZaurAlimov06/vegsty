@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,14 +23,13 @@ import com.app.vegsty.ui.theme.VegstyTheme
 fun Login(
   onLoginClick: () -> Unit,
   onPassToggleStateChange: (Boolean) -> Unit,
-  passVisibilityState: Boolean
+  emailStateLogin: String,
+  onEmailValueChanged: (String) -> Unit,
+  passwordStateLogin: String,
+  onPasswordValueChanged: (String) -> Unit,
+  passVisibilityState: Boolean,
+  isLoginButtonEnabled: Boolean
 ) {
-  var emailStateLogin by remember {
-    mutableStateOf("")
-  }
-  var passwordStateLogin by remember {
-    mutableStateOf("")
-  }
 
   Column {
     OutlinedTextField(
@@ -42,7 +41,7 @@ fun Login(
         )
       },
       onValueChange = {
-        emailStateLogin = it
+        onEmailValueChanged(it)
       },
       modifier = Modifier
         .padding(top = 20.dp)
@@ -72,7 +71,7 @@ fun Login(
         )
       },
       onValueChange = {
-        passwordStateLogin = it
+        onPasswordValueChanged(it)
       },
       modifier = Modifier
         .padding(top = 5.dp)
@@ -113,6 +112,7 @@ fun Login(
       modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp),
+      enabled = isLoginButtonEnabled,
       colors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary
@@ -136,7 +136,12 @@ fun PreviewLogin() {
     Login(
       onLoginClick = {},
       onPassToggleStateChange = {},
-      passVisibilityState = true
+      emailStateLogin = "",
+      onEmailValueChanged = { },
+      passwordStateLogin = "",
+      onPasswordValueChanged = { },
+      passVisibilityState = true,
+      isLoginButtonEnabled = true
     )
   }
 }

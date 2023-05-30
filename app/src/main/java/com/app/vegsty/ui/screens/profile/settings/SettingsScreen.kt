@@ -45,6 +45,7 @@ fun SettingsScreen(
         is UiEvent.ChangeTheme -> {
           onChangeTheme(event.isDark)
         }
+        else -> {}
       }
     }
   }

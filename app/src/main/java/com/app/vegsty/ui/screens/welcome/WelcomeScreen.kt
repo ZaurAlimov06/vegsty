@@ -35,6 +35,9 @@ fun WelcomeScreen(
   uiStateFlow: StateFlow<WelcomeUiState>,
   uiEventFlow: Flow<UiEvent>,
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
+  showShortToast: (String?) -> Unit,
+  showLongToast: (String?) -> Unit,
+  updateLoading: (Boolean) -> Unit,
   onEvent: (WelcomeScreenUiEvent) -> Unit,
   spacing: Dimension = LocalSpacing.current
 ) {
@@ -49,6 +52,21 @@ fun WelcomeScreen(
       when (event) {
         is UiEvent.Navigate<*> -> {
           onNavigate(event.navigationType, event.data)
+        }
+        is UiEvent.NavigateOnScreen -> {
+          welcomeState = event.state
+        }
+        is UiEvent.ShowShortToast -> {
+          showShortToast(event.message)
+        }
+        is UiEvent.ShowLongToast -> {
+          showLongToast(event.message)
+        }
+        is UiEvent.ShowLoading -> {
+          updateLoading(true)
+        }
+        is UiEvent.HideLoading -> {
+          updateLoading(false)
         }
         else -> {}
       }
@@ -97,16 +115,22 @@ fun WelcomeScreen(
           onPassToggleStateChange = {
             onEvent(WelcomeScreenUiEvent.OnUpdateLoginPassVisibility(it))
           },
-          passVisibilityState = uiState.isLoginPassVisible
+          emailStateLogin = uiState.loginEmail,
+          onEmailValueChanged = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateLoginEmail(it))
+          },
+          passwordStateLogin = uiState.loginPassword,
+          onPasswordValueChanged = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateLoginPassword(it))
+          },
+          passVisibilityState = uiState.isLoginPassVisible,
+          isLoginButtonEnabled = uiState.isLoginButtonEnabled
         )
       } else {
         Register(
           onRegisterClick = {
             onEvent(
-              WelcomeScreenUiEvent.OnRegisterClick(
-                email = uiState.registerEmail,
-                password = uiState.registerPassword
-              )
+              WelcomeScreenUiEvent.OnRegisterClick
             )
           },
           onPassToggleStateChange = {
@@ -117,12 +141,23 @@ fun WelcomeScreen(
             onEvent(WelcomeScreenUiEvent.OnUpdateRegisterAgainPassVisibility(it))
           },
           passAgainVisibilityState = uiState.isRegisterAgainPassVisible,
+          usernameStateRegister = uiState.registerUsername,
+          onUsernameChanged = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateRegisterUsername(it))
+          },
+          emailStateRegister = uiState.registerEmail,
           onEmailValueChanged = {
             onEvent(WelcomeScreenUiEvent.OnUpdateRegisterEmail(it))
           },
+          passwordStateRegister = uiState.registerPassword,
           onPasswordValueChanged = {
             onEvent(WelcomeScreenUiEvent.OnUpdateRegisterPassword(it))
-          }
+          },
+          passwordAgainStateRegister = uiState.registerPasswordAgain,
+          onPasswordAgainValueChanged = {
+            onEvent(WelcomeScreenUiEvent.OnUpdateRegisterPasswordAgain(it))
+          },
+          isRegisterButtonEnabled = uiState.isRegisterButtonEnabled
         )
       }
 
@@ -169,8 +204,11 @@ fun PreviewWelcomeScreen() {
         WelcomeUiState()
       ),
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
+      showShortToast = { },
+      showLongToast = { },
       onNavigate = { _, _ -> },
-      onEvent = {}
+      onEvent = {},
+      updateLoading = { }
     )
   }
 }

@@ -42,6 +42,7 @@ fun SplashScreen(
         is UiEvent.ChangeTheme -> {
           onChangeTheme(event.isDark)
         }
+        else -> {}
       }
     }
   }

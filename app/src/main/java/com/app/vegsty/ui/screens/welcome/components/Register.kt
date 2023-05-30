@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,21 +27,16 @@ fun Register(
   passVisibilityState: Boolean,
   onPassAgainToggleStateChange: (Boolean) -> Unit,
   passAgainVisibilityState: Boolean,
+  usernameStateRegister: String,
+  onUsernameChanged: (String) -> Unit,
+  emailStateRegister: String,
   onEmailValueChanged: (String) -> Unit,
-  onPasswordValueChanged: (String) -> Unit
+  passwordStateRegister: String,
+  onPasswordValueChanged: (String) -> Unit,
+  passwordAgainStateRegister: String,
+  onPasswordAgainValueChanged: (String) -> Unit,
+  isRegisterButtonEnabled: Boolean
 ) {
-  var usernameStateRegister by remember {
-    mutableStateOf("")
-  }
-  var emailStateRegister by remember {
-    mutableStateOf("")
-  }
-  var passwordStateRegister by remember {
-    mutableStateOf("")
-  }
-  var passwordAgainStateRegister by remember {
-    mutableStateOf("")
-  }
 
   Column {
     OutlinedTextField(
@@ -53,7 +48,7 @@ fun Register(
         )
       },
       onValueChange = {
-        usernameStateRegister = it
+        onUsernameChanged(it)
       },
       modifier = Modifier
         .padding(top = 20.dp)
@@ -83,7 +78,6 @@ fun Register(
         )
       },
       onValueChange = {
-        emailStateRegister = it
         onEmailValueChanged(it)
       },
       modifier = Modifier
@@ -114,7 +108,6 @@ fun Register(
         )
       },
       onValueChange = {
-        passwordStateRegister = it
         onPasswordValueChanged(it)
       },
       modifier = Modifier
@@ -158,7 +151,7 @@ fun Register(
         )
       },
       onValueChange = {
-        passwordAgainStateRegister = it
+        onPasswordAgainValueChanged(it)
       },
       modifier = Modifier
         .padding(top = 5.dp)
@@ -196,6 +189,7 @@ fun Register(
       onClick = {
         onRegisterClick()
       },
+      enabled = isRegisterButtonEnabled,
       modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp),
@@ -225,8 +219,15 @@ fun PreviewRegister() {
       onPassAgainToggleStateChange = { },
       passVisibilityState = true,
       passAgainVisibilityState = true,
+      usernameStateRegister = "",
+      onUsernameChanged = { },
+      emailStateRegister = "",
       onEmailValueChanged = { },
-      onPasswordValueChanged = { }
+      passwordStateRegister = "",
+      onPasswordValueChanged = { },
+      passwordAgainStateRegister = "",
+      onPasswordAgainValueChanged = { },
+      isRegisterButtonEnabled = true
     )
   }
 }

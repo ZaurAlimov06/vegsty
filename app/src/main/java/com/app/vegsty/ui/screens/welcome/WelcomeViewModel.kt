@@ -1,5 +1,6 @@
 package com.app.vegsty.ui.screens.welcome
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.vegsty.ui.model.ExceptionHandler
@@ -7,10 +8,12 @@ import com.app.vegsty.ui.model.UiEvent
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +32,7 @@ class WelcomeViewModel @Inject constructor(
         onLoginClick()
       }
       is WelcomeScreenUiEvent.OnRegisterClick -> {
-        onRegisterClick(welcomeScreenUiEvent.email, welcomeScreenUiEvent.password)
+        onRegisterClick()
       }
       is WelcomeScreenUiEvent.OnUpdateLoginPassVisibility -> {
         updateLoginPassVisibility(welcomeScreenUiEvent.state)
@@ -46,38 +49,64 @@ class WelcomeViewModel @Inject constructor(
       is WelcomeScreenUiEvent.OnUpdateRegisterPassword -> {
         onUpdateRegisterPassword((welcomeScreenUiEvent.password))
       }
+      is WelcomeScreenUiEvent.OnUpdateRegisterPasswordAgain -> {
+        onUpdateRegisterPasswordAgain((welcomeScreenUiEvent.passwordAgain))
+      }
+      is WelcomeScreenUiEvent.OnUpdateRegisterUsername -> {
+        onUpdateRegisterUsername(welcomeScreenUiEvent.username)
+      }
+      is WelcomeScreenUiEvent.OnUpdateLoginEmail -> {
+        onUpdateLoginEmail(welcomeScreenUiEvent.email)
+      }
+      is WelcomeScreenUiEvent.OnUpdateLoginPassword -> {
+        onUpdateLoginPassword(welcomeScreenUiEvent.password)
+      }
     }
   }
 
   private fun onLoginClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
-      _uiEvent.send(
-        UiEvent.Navigate(
-          navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_SEARCH.name),
-          data = mapOf<String, Any>()
+      _uiEvent.send(UiEvent.ShowLoading)
+      try {
+        firebaseAuth.signInWithEmailAndPassword(_uiState.value.loginEmail, _uiState.value.loginPassword).await()
+
+        _uiEvent.send(
+          UiEvent.Navigate(
+            navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_SEARCH.name),
+            data = mapOf<String, Any>()
+          )
         )
-      )
+        clearInputs()
+        _uiEvent.send(UiEvent.HideLoading)
+      } catch (e: Exception) {
+        _uiEvent.send(
+          UiEvent.ShowShortToast(e.message)
+        )
+
+        _uiEvent.send(UiEvent.HideLoading)
+      }
     }
   }
 
-  private fun onRegisterClick(
-    email: String,
-    password: String
-  ) {
+  private fun onRegisterClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
-      firebaseAuth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener { task ->
-          if (task.isSuccessful) {
-//            _uiEvent.send(
-//              UiEvent.Navigate(
-//                navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_SEARCH.name),
-//                data = mapOf<String, Any>()
-//              )
-//            )
-          } else {
-            println("<<<<<<<<<<fail")
-          }
-        }
+      _uiEvent.send(UiEvent.ShowLoading)
+      try {
+        val result = firebaseAuth.createUserWithEmailAndPassword(_uiState.value.registerEmail, _uiState.value.registerPassword).await()
+        result.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(_uiState.value.registerUsername).build())?.await()
+        clearInputs()
+        _uiEvent.send(
+          UiEvent.ShowLongToast("${result.user?.displayName} successfully registered.")
+        )
+        _uiEvent.send(UiEvent.NavigateOnScreen(true))
+        _uiEvent.send(UiEvent.HideLoading)
+      } catch (e: Exception) {
+        _uiEvent.send(
+          UiEvent.ShowShortToast(e.message)
+        )
+
+        _uiEvent.send(UiEvent.HideLoading)
+      }
     }
   }
 
@@ -118,6 +147,18 @@ class WelcomeViewModel @Inject constructor(
           registerEmail = email
         )
       }
+      onUpdateRegisterEnabled()
+    }
+  }
+
+  private fun onUpdateRegisterUsername(username: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          registerUsername = username
+        )
+      }
+      onUpdateRegisterEnabled()
     }
   }
 
@@ -127,6 +168,75 @@ class WelcomeViewModel @Inject constructor(
         currentState.copy(
           registerPassword = password
         )
+      }
+      onUpdateRegisterEnabled()
+    }
+  }
+
+  private fun onUpdateRegisterPasswordAgain(passwordAgain: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          registerPasswordAgain = passwordAgain
+        )
+      }
+      onUpdateRegisterEnabled()
+    }
+  }
+
+  private fun onUpdateLoginEmail(email: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          loginEmail = email
+        )
+      }
+      onUpdateLoginEnabled()
+    }
+  }
+
+  private fun onUpdateLoginPassword(password: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          loginPassword = password
+        )
+      }
+      onUpdateLoginEnabled()
+    }
+  }
+
+  private fun onUpdateRegisterEnabled() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          isRegisterButtonEnabled = _uiState.value.registerUsername.isNotEmpty() &&
+            _uiState.value.registerEmail.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(_uiState.value.registerEmail).matches() &&
+            _uiState.value.registerPassword.isNotEmpty() &&
+            _uiState.value.registerPasswordAgain.isNotEmpty() &&
+            _uiState.value.registerPassword == _uiState.value.registerPasswordAgain
+        )
+      }
+    }
+  }
+
+  private fun onUpdateLoginEnabled() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          isLoginButtonEnabled = _uiState.value.loginEmail.isNotEmpty() &&
+            Patterns.EMAIL_ADDRESS.matcher(_uiState.value.loginEmail).matches() &&
+            _uiState.value.loginPassword.isNotEmpty()
+        )
+      }
+    }
+  }
+
+  private fun clearInputs() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update {
+        WelcomeUiState()
       }
     }
   }

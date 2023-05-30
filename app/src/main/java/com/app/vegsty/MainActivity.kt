@@ -2,12 +2,16 @@ package com.app.vegsty
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,9 +19,11 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -71,6 +77,9 @@ class MainActivity : ComponentActivity() {
       val navController = rememberNavController()
       val backStackEntry by navController.currentBackStackEntryAsState()
       val currentScreenRoute: Route? = Route.getRoute(backStackEntry?.destination?.route)
+      val isLoading = remember {
+        mutableStateOf(false)
+      }
 
       val isThemeDark = remember {
         mutableStateOf(false)
@@ -153,8 +162,17 @@ class MainActivity : ComponentActivity() {
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
                 },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
                 onEvent = {
                   welcomeViewModel.onEvent(it)
+                },
+                updateLoading = {
+                  isLoading.value = it
                 }
               )
             }
@@ -258,12 +276,26 @@ class MainActivity : ComponentActivity() {
               )
             }
           }
+
+          if (isLoading.value) {
+            Box(
+              modifier = Modifier
+                .fillMaxSize()
+            ) {
+              CircularProgressIndicator(
+                modifier = Modifier
+                  .align(Alignment.Center)
+                  .size(50.dp),
+                color = MaterialTheme.colorScheme.tertiary
+              )
+            }
+          }
         }
       }
     }
   }
 
-  fun NavHostController.handleNavigation(
+  private fun NavHostController.handleNavigation(
     navigationType: NavigationType,
     data: Map<String, Any?>?
   ) {
