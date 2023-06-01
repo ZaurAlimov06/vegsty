@@ -46,10 +46,13 @@ import com.app.vegsty.ui.screens.homesearch.HomeSearchViewModel
 import com.app.vegsty.ui.screens.onboard.OnboardScreen
 import com.app.vegsty.ui.screens.onboard.OnboardViewModel
 import com.app.vegsty.ui.screens.profile.aboutus.AboutUsScreen
+import com.app.vegsty.ui.screens.profile.edit.EditProfile
+import com.app.vegsty.ui.screens.profile.edit.EditProfileViewModel
 import com.app.vegsty.ui.screens.profile.main.ProfileScreen
 import com.app.vegsty.ui.screens.profile.main.ProfileViewModel
 import com.app.vegsty.ui.screens.profile.settings.SettingsScreen
 import com.app.vegsty.ui.screens.profile.settings.SettingsViewModel
+import com.app.vegsty.ui.screens.profile.terms.TermsScreen
 import com.app.vegsty.ui.screens.restaurants.RestaurantScreen
 import com.app.vegsty.ui.screens.restaurants.RestaurantViewModel
 import com.app.vegsty.ui.screens.splash.SplashScreen
@@ -139,7 +142,7 @@ class MainActivity : ComponentActivity() {
               )
             }
 
-            composable(Route.SCREEN_FIRST.name) {
+            composable(Route.SCREEN_ONBOARD.name) {
               val onboardViewModel: OnboardViewModel = hiltViewModel()
 
               OnboardScreen(
@@ -153,7 +156,7 @@ class MainActivity : ComponentActivity() {
               )
             }
 
-            composable(Route.SCREEN_WELCOME.name) {
+            composable(Route.SCREEN_WELCOME.name) { currentStackEntry ->
               val welcomeViewModel: WelcomeViewModel = hiltViewModel()
 
               WelcomeScreen(
@@ -173,7 +176,8 @@ class MainActivity : ComponentActivity() {
                 },
                 updateLoading = {
                   isLoading.value = it
-                }
+                },
+                isLoginScreen = currentStackEntry.savedStateHandle.get<Boolean>(RouteArgument.ARG_WELCOME_IS_LOGIN_SCREEN.name) ?: true
               )
             }
 
@@ -239,6 +243,7 @@ class MainActivity : ComponentActivity() {
               val profileViewModel: ProfileViewModel = hiltViewModel()
 
               ProfileScreen(
+                uiStateFlow = profileViewModel.uiState,
                 uiEventFlow = profileViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
@@ -274,6 +279,31 @@ class MainActivity : ComponentActivity() {
                   settingsViewModel.onEvent(it)
                 }
               )
+            }
+
+            composable(Route.SCREEN_EDIT_PROFILE.name) {
+              val editProfileViewModel: EditProfileViewModel = hiltViewModel()
+
+              EditProfile(
+                uiStateFlow = editProfileViewModel.uiState,
+                uiEventFlow = editProfileViewModel.uiEvent,
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                onEvent = {
+                  editProfileViewModel.onEvent(it)
+                },
+                updateLoading = {
+                  isLoading.value = it
+                },
+              )
+            }
+
+            composable(Route.SCREEN_TERMS.name) {
+              TermsScreen()
             }
           }
 

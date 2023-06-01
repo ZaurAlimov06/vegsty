@@ -34,4 +34,8 @@ class PreferenceHelperImpl(
   override fun clear(key: String): Boolean {
     return encryptedSharedPreferences.edit().remove(key).commit()
   }
+
+  override fun contains(key: String): Boolean {
+    return encryptedSharedPreferences.contains(key)
+  }
 }

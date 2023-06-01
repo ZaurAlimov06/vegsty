@@ -10,4 +10,5 @@ interface PreferenceHelper {
   fun getBoolean(key: String, defaultValue: Boolean): Boolean
 
   fun clear(key: String): Boolean
+  fun contains(key: String): Boolean
 }

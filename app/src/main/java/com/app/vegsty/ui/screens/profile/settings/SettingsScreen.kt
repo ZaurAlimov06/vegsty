@@ -63,7 +63,7 @@ fun SettingsScreen(
       textAlign = TextAlign.Center,
       modifier = Modifier
         .fillMaxWidth(),
-      style = MaterialTheme.typography.bodyMedium,
+      style = MaterialTheme.typography.bodySmall,
       color = MaterialTheme.colorScheme.onBackground
     )
 

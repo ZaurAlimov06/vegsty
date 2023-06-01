@@ -106,7 +106,7 @@ fun OnboardScreen(
       ) {
         Text(
           modifier = Modifier
-            .padding(top = 12.dp, bottom = 12.dp),
+            .padding(top = 10.dp, bottom = 10.dp),
           text = stringResource(id = R.string.onboard_button_get_started),
           style = MaterialTheme.typography.titleLarge,
           color = WhiteColor

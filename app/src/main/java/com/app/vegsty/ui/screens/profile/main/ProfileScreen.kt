@@ -9,9 +9,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,16 +24,23 @@ import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.theme.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun ProfileScreen(
+  uiStateFlow: StateFlow<ProfileUiState>,
   uiEventFlow: Flow<UiEvent>,
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
   onEvent: (ProfileUiEvent) -> Unit,
   spacing: Dimension = LocalSpacing.current
 ) {
+  val uiState by uiStateFlow.collectAsState()
+
   LaunchedEffect(true) {
+    onEvent(ProfileUiEvent.GetUsername)
+
     uiEventFlow.collect { event ->
       when (event) {
         is UiEvent.Navigate<*> -> {
@@ -61,7 +66,7 @@ fun ProfileScreen(
         textAlign = TextAlign.Center,
         modifier = Modifier
           .fillMaxWidth(),
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onBackground
       )
 
@@ -74,7 +79,7 @@ fun ProfileScreen(
       )
 
       Text(
-        text = "User Name",
+        text = uiState.username,
         textAlign = TextAlign.Center,
         modifier = Modifier
           .fillMaxWidth()
@@ -109,7 +114,7 @@ fun ProfileScreen(
         Text(
           text = stringResource(id = R.string.edit_profile_button),
           modifier = Modifier
-            .padding(start = 16.dp)
+            .padding(start = 10.dp)
             .weight(1.0f),
           color = MaterialTheme.colorScheme.onBackground,
           style = MaterialTheme.typography.titleMedium
@@ -298,6 +303,11 @@ fun ProfileScreen(
 fun PreviewProfileScreen() {
   VegstyTheme {
     ProfileScreen(
+      uiStateFlow = MutableStateFlow(
+        ProfileUiState(
+          username = "User Name"
+        )
+      ),
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
       onNavigate = { _, _ -> },
       onEvent = {}

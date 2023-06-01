@@ -5,7 +5,7 @@ enum class Route(
 ) {
   SCREEN_ABOUT_US,
   SCREEN_SPLASH,
-  SCREEN_FIRST,
+  SCREEN_ONBOARD,
   SCREEN_WELCOME,
   SCREEN_SEARCH(hasBottomBar = true),
   SCREEN_FAVORITES(hasBottomBar = true),
@@ -13,7 +13,9 @@ enum class Route(
   SCREEN_RESTAURANTS(hasBottomBar = true),
   SCREEN_PROFILE(hasBottomBar = true),
   SCREEN_HOME_RECIPE_DETAIL,
-  SCREEN_SETTINGS
+  SCREEN_SETTINGS,
+  SCREEN_EDIT_PROFILE,
+  SCREEN_TERMS
   ;
 
   companion object {

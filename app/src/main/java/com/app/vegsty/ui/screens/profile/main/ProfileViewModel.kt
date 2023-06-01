@@ -2,19 +2,26 @@ package com.app.vegsty.ui.screens.profile.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.UiEvent
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
+  private val firebaseAuth: FirebaseAuth,
+  private val mainLocal: MainLocal
 ) : ViewModel() {
+  private val _uiState = MutableStateFlow(ProfileUiState())
+  val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
   private val _uiEvent = Channel<UiEvent>()
   val uiEvent = _uiEvent.receiveAsFlow()
 
@@ -35,6 +42,9 @@ class ProfileViewModel @Inject constructor(
       is ProfileUiEvent.OnTermsClick -> {
         onTermsClick()
       }
+      is ProfileUiEvent.GetUsername -> {
+        getUserName()
+      }
     }
   }
 
@@ -51,13 +61,41 @@ class ProfileViewModel @Inject constructor(
 
   private fun onEditProfileClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
-
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.Navigate(Route.SCREEN_EDIT_PROFILE.name),
+          data = mapOf<String, Any>()
+        )
+      )
     }
   }
 
   private fun onLogOutClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(UiEvent.ShowLoading)
 
+      try {
+        firebaseAuth.signOut()
+
+        mainLocal.deleteUsername()
+        mainLocal.deleteEmail()
+        mainLocal.deletePassword()
+
+        _uiEvent.send(
+          UiEvent.Navigate(
+            navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_WELCOME.name),
+            data = mapOf<String, Any>()
+          )
+        )
+
+        _uiEvent.send(UiEvent.HideLoading)
+      } catch (e: Exception) {
+        _uiEvent.send(
+          UiEvent.ShowShortToast(e.message)
+        )
+
+        _uiEvent.send(UiEvent.HideLoading)
+      }
     }
   }
 
@@ -74,7 +112,28 @@ class ProfileViewModel @Inject constructor(
 
   private fun onTermsClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.Navigate(Route.SCREEN_TERMS.name),
+          data = mapOf<String, Any>()
+        )
+      )
+    }
+  }
 
+  private fun getUserName() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      onUpdateUsername(mainLocal.getUsername())
+    }
+  }
+
+  private fun onUpdateUsername(username: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          username = username
+        )
+      }
     }
   }
 }

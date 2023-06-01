@@ -2,7 +2,7 @@ package com.app.vegsty.ui.screens.profile.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.vegsty.data.local.ProfileLocal
+import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-  private val profileLocal: ProfileLocal
+  private val mainLocal: MainLocal
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(SettingsUiState())
   val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
@@ -37,7 +37,7 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiState.update { currentState ->
         currentState.copy(
-          themeState = profileLocal.getTheme()
+          themeState = mainLocal.getTheme()
         )
       }
     }
@@ -45,7 +45,7 @@ class SettingsViewModel @Inject constructor(
 
   private fun onChangeTheme(isDark: Boolean) {
     viewModelScope.launch(ExceptionHandler.handler) {
-      profileLocal.saveTheme(isDark)
+      mainLocal.saveTheme(isDark)
 
       _uiEvent.send(
         UiEvent.ChangeTheme(

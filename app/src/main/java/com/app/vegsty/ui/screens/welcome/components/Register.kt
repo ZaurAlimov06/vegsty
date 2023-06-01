@@ -9,9 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.vegsty.R
@@ -60,6 +58,11 @@ fun Register(
           tint = MaterialTheme.colorScheme.onBackground
         )
       },
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next,
+        capitalization = KeyboardCapitalization.Words
+      ),
       singleLine = true,
       maxLines = 1,
       colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -90,6 +93,10 @@ fun Register(
           tint = MaterialTheme.colorScheme.onBackground
         )
       },
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Email,
+        imeAction = ImeAction.Next
+      ),
       singleLine = true,
       maxLines = 1,
       colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -118,7 +125,10 @@ fun Register(
       } else {
         PasswordVisualTransformation()
       },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Next
+      ),
       leadingIcon = {
         Icon(
           painter = painterResource(id = R.drawable.ic_lock),
@@ -161,7 +171,10 @@ fun Register(
       } else {
         PasswordVisualTransformation()
       },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Done
+      ),
       leadingIcon = {
         Icon(
           painter = painterResource(id = R.drawable.ic_lock),

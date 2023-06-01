@@ -1,4 +1,4 @@
-package com.app.vegsty.ui.screens.profile.aboutus
+package com.app.vegsty.ui.screens.profile.terms
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +24,7 @@ import com.app.vegsty.ui.theme.LocalSpacing
 import com.app.vegsty.ui.theme.VegstyTheme
 
 @Composable
-fun AboutUsScreen(
+fun TermsScreen(
   spacing: Dimension = LocalSpacing.current
 ) {
   Column(
@@ -34,8 +34,9 @@ fun AboutUsScreen(
         vertical = spacing.spaceScreenVerticalPadding
       )
   ) {
+
     Text(
-      text = stringResource(id = R.string.about_us_title_text_about_us),
+      text = stringResource(id = R.string.terms_title_text_terms),
       textAlign = TextAlign.Center,
       modifier = Modifier
         .fillMaxWidth(),
@@ -52,6 +53,7 @@ fun AboutUsScreen(
     ) {
 
       item {
+
         Icon(
           modifier = Modifier,
           tint = Color.Unspecified,
@@ -60,7 +62,7 @@ fun AboutUsScreen(
         )
 
         Text(
-          text = stringResource(id = R.string.about_us_text),
+          text = stringResource(id = R.string.terms_text),
           textAlign = TextAlign.Center,
           modifier = Modifier
             .fillMaxWidth()
@@ -82,8 +84,8 @@ fun AboutUsScreen(
 
 @Composable
 @Preview(showBackground = true)
-fun PreviewAboutUsScreen() {
+fun PreviewTermsScreen() {
   VegstyTheme {
-    AboutUsScreen()
+    TermsScreen()
   }
 }

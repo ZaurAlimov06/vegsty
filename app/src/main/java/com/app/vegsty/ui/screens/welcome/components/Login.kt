@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -53,6 +54,10 @@ fun Login(
           tint = MaterialTheme.colorScheme.onBackground
         )
       },
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Email,
+        imeAction = ImeAction.Next
+      ),
       colors = TextFieldDefaults.outlinedTextFieldColors(
         focusedBorderColor = MaterialTheme.colorScheme.primary,
         unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
@@ -81,7 +86,10 @@ fun Login(
       } else {
         PasswordVisualTransformation()
       },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+      keyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Done
+      ),
       leadingIcon = {
         Icon(
           painter = painterResource(id = R.drawable.ic_lock),

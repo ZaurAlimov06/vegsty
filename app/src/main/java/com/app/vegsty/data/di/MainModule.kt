@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.app.vegsty.data.local.MainLocal
+import com.app.vegsty.data.local.MainLocalImpl
 import com.app.vegsty.data.local.PreferenceHelperImpl
-import com.app.vegsty.data.local.ProfileLocal
-import com.app.vegsty.data.local.ProfileLocalImpl
 import com.app.vegsty.data.remote.service.MainService
 import com.app.vegsty.data.repository.MainRepositoryImpl
 import com.app.vegsty.ui.repository.MainRepository
@@ -71,10 +71,10 @@ object MainModule {
   /* Locals */
   @Provides
   @Singleton
-  fun provideProfileLocal(
+  fun provideMainLocal(
     preferenceHelper: PreferenceHelper
-  ): ProfileLocal {
-    return ProfileLocalImpl(
+  ): MainLocal {
+    return MainLocalImpl(
       preferenceHelper
     )
   }

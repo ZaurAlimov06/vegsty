@@ -39,10 +39,11 @@ fun WelcomeScreen(
   showLongToast: (String?) -> Unit,
   updateLoading: (Boolean) -> Unit,
   onEvent: (WelcomeScreenUiEvent) -> Unit,
+  isLoginScreen: Boolean,
   spacing: Dimension = LocalSpacing.current
 ) {
   var welcomeState by remember {
-    mutableStateOf(true)
+    mutableStateOf(isLoginScreen)
   }
 
   val uiState by uiStateFlow.collectAsState()
@@ -208,7 +209,8 @@ fun PreviewWelcomeScreen() {
       showLongToast = { },
       onNavigate = { _, _ -> },
       onEvent = {},
-      updateLoading = { }
+      updateLoading = { },
+      isLoginScreen = true
     )
   }
 }
