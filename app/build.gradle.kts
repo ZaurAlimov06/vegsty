@@ -82,6 +82,7 @@ dependencies {
   implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
   implementation("androidx.security:security-crypto:1.0.0")
   implementation("com.google.firebase:firebase-auth-ktx")
+  implementation("com.github.skydoves:landscapist-glide:2.1.0")
 
   debugImplementation("androidx.compose.ui:ui-tooling")
   debugImplementation("androidx.compose.ui:ui-test-manifest")

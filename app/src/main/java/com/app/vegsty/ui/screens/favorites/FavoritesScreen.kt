@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +28,17 @@ fun FavoritesScreen(
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
   spacing: Dimension = LocalSpacing.current
 ) {
+
+  LaunchedEffect(true) {
+    uiEventFlow.collect { event ->
+      when (event) {
+        is UiEvent.Navigate<*> -> {
+          onNavigate(event.navigationType, event.data)
+        }
+        else -> {}
+      }
+    }
+  }
 
   LazyColumn(
     modifier = Modifier

@@ -68,5 +68,6 @@ Thank you for choosing Vegsty as your companion on your vegan or vegetarian jour
 
   <!--    Common Strings-->
   <string name="common_icon_content_description">Icon</string>
+  <string name="common_image_reload_text">Tap to reload</string>
 
 </resources>

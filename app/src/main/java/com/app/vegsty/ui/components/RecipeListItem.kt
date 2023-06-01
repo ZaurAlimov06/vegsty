@@ -34,6 +34,12 @@ fun RecipeListItem(
       )
   ) {
 
+    RecipeImage(
+      imageUrl = recipe.imgUrl,
+      onLoadImageAgainClick = {
+
+      }
+    )
 
     Text(
       text = recipe.title,
