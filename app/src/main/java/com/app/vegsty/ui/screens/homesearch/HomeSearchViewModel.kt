@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.vegsty.data.remote.dto.Recipe
 import com.app.vegsty.ui.model.ExceptionHandler
+import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
 import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.route.NavigationType
@@ -29,26 +30,38 @@ class HomeSearchViewModel @Inject constructor(
     getAllRecipes()
   }
 
-  fun onEvent(homeUiEvent: HomeUiEvent){
-    when(homeUiEvent){
+  fun onEvent(homeUiEvent: HomeUiEvent) {
+    when (homeUiEvent) {
       is HomeUiEvent.OnRecipeClick -> {
         navigateToDetail(homeUiEvent.recipe)
       }
     }
   }
 
-  private fun getAllRecipes(){
-    viewModelScope.launch(ExceptionHandler.handler){
-      _uiState.update { currentState ->
-        currentState.copy(
-          recipeList = mainRepository.getAllRecipes()
-        )
+  private fun getAllRecipes() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(UiEvent.ShowLoading)
+
+      when (val result = mainRepository.getAllRecipes()) {
+        is Response.Fail -> {
+          _uiEvent.send(UiEvent.ShowShortToast(result.exception.message))
+          _uiEvent.send(UiEvent.HideLoading)
+        }
+        is Response.Success -> {
+          _uiState.update { currentState ->
+            currentState.copy(
+              recipeList = result.result
+            )
+          }
+
+          _uiEvent.send(UiEvent.HideLoading)
+        }
       }
     }
   }
 
-  private fun navigateToDetail(recipe: Recipe){
-    viewModelScope.launch(ExceptionHandler.handler){
+  private fun navigateToDetail(recipe: Recipe) {
+    viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(
         UiEvent.Navigate(
           navigationType = NavigationType.Navigate(Route.SCREEN_HOME_RECIPE_DETAIL.name),

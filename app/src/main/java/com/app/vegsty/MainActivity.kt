@@ -171,11 +171,11 @@ class MainActivity : ComponentActivity() {
                 showLongToast = {
                   Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
                 },
-                onEvent = {
-                  welcomeViewModel.onEvent(it)
-                },
                 updateLoading = {
                   isLoading.value = it
+                },
+                onEvent = {
+                  welcomeViewModel.onEvent(it)
                 },
                 isLoginScreen = currentStackEntry.savedStateHandle.get<Boolean>(RouteArgument.ARG_WELCOME_IS_LOGIN_SCREEN.name) ?: true
               )
@@ -203,6 +203,15 @@ class MainActivity : ComponentActivity() {
                 },
                 onEvent = {
                   homeSearchViewModel.onEvent(it)
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
                 }
               )
             }

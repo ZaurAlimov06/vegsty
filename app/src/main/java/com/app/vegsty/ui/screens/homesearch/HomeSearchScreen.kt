@@ -27,6 +27,9 @@ fun HomeSearchScreen(
   uiStateFlow: StateFlow<HomeUiState>,
   uiEventFlow: Flow<UiEvent>,
   onNavigate: (NavigationType, data: Map<String, Any?>?) -> Unit,
+  showShortToast: (String?) -> Unit,
+  showLongToast: (String?) -> Unit,
+  updateLoading: (Boolean) -> Unit,
   onEvent: (HomeUiEvent) -> Unit,
   spacing: Dimension = LocalSpacing.current
 ) {
@@ -41,6 +44,18 @@ fun HomeSearchScreen(
       when (event) {
         is UiEvent.Navigate<*> -> {
           onNavigate(event.navigationType, event.data)
+        }
+        is UiEvent.ShowShortToast -> {
+          showShortToast(event.message)
+        }
+        is UiEvent.ShowLongToast -> {
+          showLongToast(event.message)
+        }
+        is UiEvent.ShowLoading -> {
+          updateLoading(true)
+        }
+        is UiEvent.HideLoading -> {
+          updateLoading(false)
         }
         else -> {}
       }
@@ -110,14 +125,17 @@ fun PreviewHomeSearchScreen() {
       uiStateFlow = MutableStateFlow(
         HomeUiState(
           recipeList = listOf(
-            Recipe(1, "", "detail1", "title1", 14, 15, 16, 17),
-            Recipe(2, "", "detail2", "title2", 14, 15, 16, 17)
+            Recipe("", "", "detail1", "title1", 14, 15, 16, 17),
+            Recipe("", "", "detail2", "title2", 14, 15, 16, 17)
           )
         )
       ),
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
       onNavigate = { _, _ -> },
-      onEvent = {}
+      onEvent = {},
+      showShortToast = { },
+      showLongToast = { },
+      updateLoading = { }
     )
   }
 }

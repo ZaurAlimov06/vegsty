@@ -49,7 +49,7 @@ fun PreviewDetailScreen() {
   VegstyTheme {
     DetailScreen(
       recipe = Recipe(
-        id = 1,
+        id = "",
         imgUrl = "",
         detail = "",
         title = "",

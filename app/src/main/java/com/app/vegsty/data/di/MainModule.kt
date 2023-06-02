@@ -7,21 +7,18 @@ import androidx.security.crypto.MasterKeys
 import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.data.local.MainLocalImpl
 import com.app.vegsty.data.local.PreferenceHelperImpl
-import com.app.vegsty.data.remote.service.MainService
 import com.app.vegsty.data.repository.MainRepositoryImpl
 import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.repository.PreferenceHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -58,14 +55,9 @@ object MainModule {
 
   @Provides
   @Singleton
-  fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder()
-      .addInterceptor(
-        HttpLoggingInterceptor().apply {
-          level = HttpLoggingInterceptor.Level.BODY
-        }
-      )
-      .build()
+  fun provideFirebaseDatabaseReference(
+  ): DatabaseReference {
+    return Firebase.database.reference
   }
 
   /* Locals */
@@ -79,25 +71,14 @@ object MainModule {
     )
   }
 
-  /* Services */
-  @Provides
-  @Singleton
-  fun provideMainServices(client: OkHttpClient): MainService {
-    return Retrofit.Builder()
-      .baseUrl("https://localhost")
-      .client(client)
-      .build()
-      .create()
-  }
-
   /* Repositories */
   @Provides
   @Singleton
   fun provideMainRepository(
-    mainService: MainService
+    databaseReference: DatabaseReference
   ): MainRepository {
     return MainRepositoryImpl(
-      mainService
+      databaseReference
     )
   }
 }

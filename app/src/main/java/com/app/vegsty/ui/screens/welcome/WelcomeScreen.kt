@@ -207,9 +207,9 @@ fun PreviewWelcomeScreen() {
       uiEventFlow = Channel<UiEvent>().receiveAsFlow(),
       showShortToast = { },
       showLongToast = { },
+      updateLoading = { },
       onNavigate = { _, _ -> },
       onEvent = {},
-      updateLoading = { },
       isLoginScreen = true
     )
   }
