@@ -53,10 +53,10 @@ fun PreviewDetailScreen() {
         imgUrl = "",
         detail = "",
         title = "",
-        protein = 12,
-        calorie = 14,
-        fat = 16,
-        carbs = 17
+        protein = "12",
+        calorie = "14",
+        fat = "16",
+        carbs = "17"
       ),
       onNavigate = { _, _ -> }
     )

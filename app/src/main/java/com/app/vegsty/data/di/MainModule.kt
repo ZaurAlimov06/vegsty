@@ -75,10 +75,11 @@ object MainModule {
   @Provides
   @Singleton
   fun provideMainRepository(
+    firebaseAuth: FirebaseAuth,
     databaseReference: DatabaseReference
   ): MainRepository {
     return MainRepositoryImpl(
-      databaseReference
+      firebaseAuth, databaseReference
     )
   }
 }

@@ -48,6 +48,8 @@ import com.app.vegsty.ui.screens.onboard.OnboardViewModel
 import com.app.vegsty.ui.screens.profile.aboutus.AboutUsScreen
 import com.app.vegsty.ui.screens.profile.edit.EditProfile
 import com.app.vegsty.ui.screens.profile.edit.EditProfileViewModel
+import com.app.vegsty.ui.screens.profile.insert.DataInsertScreen
+import com.app.vegsty.ui.screens.profile.insert.DataInsertViewModel
 import com.app.vegsty.ui.screens.profile.main.ProfileScreen
 import com.app.vegsty.ui.screens.profile.main.ProfileViewModel
 import com.app.vegsty.ui.screens.profile.settings.SettingsScreen
@@ -313,6 +315,30 @@ class MainActivity : ComponentActivity() {
 
             composable(Route.SCREEN_TERMS.name) {
               TermsScreen()
+            }
+
+            composable(Route.SCREEN_DATA_INSERT.name) {
+              val dataInsertViewModel: DataInsertViewModel = hiltViewModel()
+
+              DataInsertScreen(
+                uiStateFlow = dataInsertViewModel.uiState,
+                uiEventFlow = dataInsertViewModel.uiEvent,
+                onNavigate = { navigationType, data ->
+                  navController.handleNavigation(navigationType, data)
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
+                },
+                onEvent = {
+                  dataInsertViewModel.onEvent(it)
+                }
+              )
             }
           }
 

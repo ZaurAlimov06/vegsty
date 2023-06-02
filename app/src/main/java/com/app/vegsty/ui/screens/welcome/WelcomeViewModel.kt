@@ -5,21 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
+import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
+import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
-  private val firebaseAuth: FirebaseAuth,
+  private val mainRepository: MainRepository,
   private val mainLocal: MainLocal
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(WelcomeUiState())
@@ -69,27 +68,29 @@ class WelcomeViewModel @Inject constructor(
   private fun onLoginClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
-      try {
-        val result = firebaseAuth.signInWithEmailAndPassword(_uiState.value.loginEmail, _uiState.value.loginPassword).await()
 
-        mainLocal.saveUsername(result.user?.displayName)
-        mainLocal.saveEmail(_uiState.value.loginEmail)
-        mainLocal.savePassword(_uiState.value.loginPassword)
+      when (val result = mainRepository.loginUser(
+        _uiState.value.loginEmail,
+        _uiState.value.loginPassword
+      )) {
+        is Response.Fail -> {
+          _uiEvent.send(UiEvent.ShowShortToast(result.exception.message))
+          _uiEvent.send(UiEvent.HideLoading)
+        }
+        is Response.Success -> {
+          mainLocal.saveUsername(result.result.user?.displayName)
+          mainLocal.saveEmail(_uiState.value.loginEmail)
+          mainLocal.savePassword(_uiState.value.loginPassword)
 
-        _uiEvent.send(
-          UiEvent.Navigate(
-            navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_SEARCH.name),
-            data = mapOf<String, Any>()
+          _uiEvent.send(
+            UiEvent.Navigate(
+              navigationType = NavigationType.ClearBackStackNavigate(Route.SCREEN_SEARCH.name),
+              data = mapOf<String, Any>()
+            )
           )
-        )
-        clearInputs()
-        _uiEvent.send(UiEvent.HideLoading)
-      } catch (e: Exception) {
-        _uiEvent.send(
-          UiEvent.ShowShortToast(e.message)
-        )
-
-        _uiEvent.send(UiEvent.HideLoading)
+          clearInputs()
+          _uiEvent.send(UiEvent.HideLoading)
+        }
       }
     }
   }
@@ -97,21 +98,24 @@ class WelcomeViewModel @Inject constructor(
   private fun onRegisterClick() {
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
-      try {
-        val result = firebaseAuth.createUserWithEmailAndPassword(_uiState.value.registerEmail, _uiState.value.registerPassword).await()
-        result.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(_uiState.value.registerUsername).build())?.await()
-        clearInputs()
-        _uiEvent.send(
-          UiEvent.ShowLongToast("${result.user?.displayName} successfully registered.")
-        )
-        _uiEvent.send(UiEvent.NavigateOnScreen(true))
-        _uiEvent.send(UiEvent.HideLoading)
-      } catch (e: Exception) {
-        _uiEvent.send(
-          UiEvent.ShowShortToast(e.message)
-        )
 
-        _uiEvent.send(UiEvent.HideLoading)
+      when (val result = mainRepository.registerUser(
+        _uiState.value.registerUsername,
+        _uiState.value.registerEmail,
+        _uiState.value.registerPassword
+      )) {
+        is Response.Fail -> {
+          _uiEvent.send(UiEvent.ShowShortToast(result.exception.message))
+          _uiEvent.send(UiEvent.HideLoading)
+        }
+        is Response.Success -> {
+          clearInputs()
+          _uiEvent.send(
+            UiEvent.ShowLongToast("${result.result.user?.displayName} successfully registered.")
+          )
+          _uiEvent.send(UiEvent.NavigateOnScreen(true))
+          _uiEvent.send(UiEvent.HideLoading)
+        }
       }
     }
   }

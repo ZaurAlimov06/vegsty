@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.UiEvent
+import com.app.vegsty.ui.route.NavigationType
+import com.app.vegsty.ui.route.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -29,6 +31,9 @@ class SettingsViewModel @Inject constructor(
     when (settingsUiEvent) {
       is SettingsUiEvent.OnChangeTheme -> {
         onChangeTheme(settingsUiEvent.isDark)
+      }
+      is SettingsUiEvent.OnSettingsClick -> {
+        onSettingsClick()
       }
     }
   }
@@ -58,6 +63,17 @@ class SettingsViewModel @Inject constructor(
           themeState = isDark
         )
       }
+    }
+  }
+
+  private fun onSettingsClick() {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.Navigate(Route.SCREEN_DATA_INSERT.name),
+          data = mapOf<String, Any>()
+        )
+      )
     }
   }
 }

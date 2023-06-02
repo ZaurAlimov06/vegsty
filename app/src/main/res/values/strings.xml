@@ -66,6 +66,21 @@ Thank you for choosing Vegsty as your companion on your vegan or vegetarian jour
   <!--    Edit Profile Screen-->
   <string name="edit_profile_title_text_profile">Edit Profile</string>
 
+  <!--    Data Insert Screen-->
+  <string name="data_insert_text_data_insert">Data Insert</string>
+  <string name="data_insert_text_recipe">Recipe</string>
+  <string name="data_insert_label_recipe_title">Title</string>
+  <string name="data_insert_label_recipe_detail">Detail</string>
+  <string name="data_insert_label_img_url">Image URL</string>
+  <string name="data_insert_label_recipe_protein">Protein</string>
+  <string name="data_insert_label_recipe_calorie">Calorie</string>
+  <string name="data_insert_label_recipe_fat">Fat</string>
+  <string name="data_insert_label_recipe_carbs">Carbs</string>
+  <string name="data_insert_button_insert_recipe">Insert Recipe</string>
+  <string name="data_insert_text_restaurant">Restaurant</string>
+  <string name="data_insert_label_restaurant_name">Name</string>
+  <string name="data_insert_button_insert_restaurant">Insert Restaurant</string>
+
   <!--    Common Strings-->
   <string name="common_icon_content_description">Icon</string>
   <string name="common_image_reload_text">Tap to reload</string>

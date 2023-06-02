@@ -1,14 +1,13 @@
 package com.app.vegsty.ui.screens.profile.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -62,7 +61,16 @@ fun SettingsScreen(
       text = stringResource(id = R.string.settings_title_text_profile),
       textAlign = TextAlign.Center,
       modifier = Modifier
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .clickable(
+          interactionSource = remember {
+            MutableInteractionSource()
+          },
+          indication = null,
+          onClick = {
+            onEvent(SettingsUiEvent.OnSettingsClick)
+          }
+        ),
       style = MaterialTheme.typography.bodySmall,
       color = MaterialTheme.colorScheme.onBackground
     )

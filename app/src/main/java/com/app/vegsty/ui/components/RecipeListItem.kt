@@ -58,7 +58,7 @@ fun RecipeListItem(
 fun PreviewRecipeListItem() {
   VegstyTheme {
     RecipeListItem(
-      recipe = Recipe("", "", "detail1", "title1", 14, 15, 16, 17),
+      recipe = Recipe("", "", "detail1", "title1", "14", "15", "16", "17"),
       onRecipeClick = {}
     )
   }

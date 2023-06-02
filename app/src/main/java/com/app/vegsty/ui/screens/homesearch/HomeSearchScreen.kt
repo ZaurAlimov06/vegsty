@@ -125,8 +125,8 @@ fun PreviewHomeSearchScreen() {
       uiStateFlow = MutableStateFlow(
         HomeUiState(
           recipeList = listOf(
-            Recipe("", "", "detail1", "title1", 14, 15, 16, 17),
-            Recipe("", "", "detail2", "title2", 14, 15, 16, 17)
+            Recipe("", "", "detail1", "title1", "14", "15", "16", "17"),
+            Recipe("", "", "detail2", "title2", "14", "15", "16", "17")
           )
         )
       ),
