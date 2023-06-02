@@ -15,28 +15,47 @@
   <string name="welcome_text_sign_in_with_google">Sign in with Google</string>
   <string name="welcome_switch_button_login">Login</string>
   <string name="welcome_switch_button_register">Register</string>
-  <string name="welcome_login_label_email_address">Email address</string>
-  <string name="welcome_login_label_password">Password</string>
-  <string name="welcome_login_button_login">Login</string>
-  <string name="welcome_register_label_username">Username</string>
-  <string name="welcome_register_label_email_address">Email address</string>
-  <string name="welcome_register_label_password">Password</string>
-  <string name="welcome_register_label_password_again">Password again</string>
-  <string name="welcome_register_button_register">Register</string>
+    <string name="welcome_login_label_email_address">Email address</string>
+    <string name="welcome_login_label_password">Password</string>
+    <string name="welcome_login_button_login">Login</string>
+    <string name="welcome_register_label_username">Username</string>
+    <string name="welcome_register_label_email_address">Email address</string>
+    <string name="welcome_register_label_password">Password</string>
+    <string name="welcome_register_label_password_again">Password again</string>
+    <string name="welcome_register_button_register">Register</string>
 
-  <!--    Restaurants Screen-->
-  <string name="restaurants_title_text_restaurants">Restaurants</string>
+    <!--    Restaurants Screen-->
+    <string name="restaurants_title_text_restaurants">Vegan and Vegetarian Restaurants</string>
+    <string name="first_restaurant_title">Vegan Garden</string>
+    <string name="second_restaurant_title">Vega City</string>
 
-  <!--    HomeSearch Screen-->
-  <string name="homesearch_label_search">Search recipes, articles, people…</string>
+    <!--    First Restaurant Screen-->
+    <string name="first_restaurant_text">Welcome to Vegan Garden: Where Nature Inspires Every Bite!\n
+    Escape to a world of culinary bliss at Vegan Garden, the perfect oasis for plant-based food enthusiasts like you. Step into a realm where nature\'s bounty takes center stage, and every dish is a celebration of vibrant flavors and sustainable living.\n
+    Our menu is a symphony of seasonal produce, thoughtfully combined to create a harmonious blend of textures and tastes. Whether you crave a hearty lentil and vegetable stew or prefer the delicate balance of our avocado and mango salad, Vegan Garden offers a variety of options to satisfy every palate.\n
+    But Vegan Garden is more than just a restaurant—it\'s a sanctuary where sustainability thrives. We are committed to eco-friendly practices, from sourcing organic ingredients to utilizing biodegradable packaging. When you dine with us, you\'re not just enjoying a meal you\'re actively contributing to a healthier planet.\n
+    Whether you\'re a committed vegan, a health-conscious foodie, or someone curious about the wonders of plant-based cuisine, Vegan Garden is your haven. Step into our serene ambiance, where lush greenery surrounds you, and enjoy a dining experience that nourishes both your body and soul.\n
+    Visit Vegan Garden and embark on a culinary adventure where every bite transports you to a world of natural abundance. Let the flavors of our garden-inspired creations awaken your senses and leave you craving more. Vegan Garden—where nature inspires every bite.</string>
+    <string name="first_restaurant_address">Address: Budapest, Király u. 8-10, 1061</string>
 
-  <!--    Goals Screen-->
-  <string name="goals_title_text_goals">Goals</string>
+    <!--    Second Restaurant Screen-->
+    <string name="second_restaurant_text">Discover VegaCity: Where Vegan Delights Await!\n
+    Welcome to VegaCity, the ultimate haven for plant-based cuisine enthusiasts! Experience a culinary revolution where taste, health, and compassion merge harmoniously.\n
+    Indulge in our mouthwatering menu, meticulously crafted by our talented chefs. From sizzling vegan burgers packed with flavorful plant-based proteins to zesty Mediterranean wraps bursting with fresh vegetables, our offerings will tantalize your taste buds like never before.\n
+    At VegaCity, we believe in the power of plants to create extraordinary flavors. Delight in our vibrant salads, brimming with seasonal produce, and savor our creamy plant-based pasta dishes that will leave you craving more./n
+    Join us at VegaCity, where every dish is a celebration of compassion, flavor, and mindful living. Taste the future today!</string>
+    <string name="second_restaurant_address">Address: Budapest, Múzeum krt. 23, 1053</string>
 
-  <!--    Favorites Screen-->
-  <string name="favorites_title_text_favorites">Favorites</string>
+    <!--    HomeSearch Screen-->
+    <string name="homesearch_label_search">Search recipes, articles, people…</string>
 
-  <!--    Profile Screen-->
+    <!--    Goals Screen-->
+    <string name="goals_title_text_goals">Goals</string>
+
+    <!--    Favorites Screen-->
+    <string name="favorites_title_text_favorites">Favorites</string>
+
+    <!--    Profile Screen-->
   <string name="profile_title_text_profile">Profile</string>
   <string name="edit_profile_button">Edit profile</string>
   <string name="settings">Settings</string>

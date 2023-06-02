@@ -55,8 +55,10 @@ import com.app.vegsty.ui.screens.profile.main.ProfileViewModel
 import com.app.vegsty.ui.screens.profile.settings.SettingsScreen
 import com.app.vegsty.ui.screens.profile.settings.SettingsViewModel
 import com.app.vegsty.ui.screens.profile.terms.TermsScreen
-import com.app.vegsty.ui.screens.restaurants.RestaurantScreen
-import com.app.vegsty.ui.screens.restaurants.RestaurantViewModel
+import com.app.vegsty.ui.screens.restaurants.detail.FirstRestaurantScreen
+import com.app.vegsty.ui.screens.restaurants.detail.SecondRestaurantScreen
+import com.app.vegsty.ui.screens.restaurants.main.RestaurantScreen
+import com.app.vegsty.ui.screens.restaurants.main.RestaurantViewModel
 import com.app.vegsty.ui.screens.splash.SplashScreen
 import com.app.vegsty.ui.screens.splash.SplashViewModel
 import com.app.vegsty.ui.screens.welcome.WelcomeScreen
@@ -190,8 +192,19 @@ class MainActivity : ComponentActivity() {
                 uiEventFlow = restaurantViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
+                },
+                onEvent = {
+                  restaurantViewModel.onEvent(it)
                 }
               )
+            }
+
+            composable(Route.SCREEN_FIRST_RESTAURANT.name) {
+              FirstRestaurantScreen()
+            }
+
+            composable(Route.SCREEN_SECOND_RESTAURANT.name) {
+              SecondRestaurantScreen()
             }
 
             composable(Route.SCREEN_SEARCH.name) {
