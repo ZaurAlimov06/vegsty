@@ -99,7 +99,10 @@ class DataInsertViewModel @Inject constructor(
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
       val restaurant = Restaurant(
-        name = _uiState.value.restaurantName
+        name = _uiState.value.restaurantName,
+        detail = _uiState.value.restaurantDetail,
+        address = _uiState.value.restaurantAddress,
+        photo = _uiState.value.restaurantPhoto
       )
 
       when (val result = mainRepository.insertRestaurant(restaurant)) {
