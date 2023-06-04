@@ -11,5 +11,8 @@ data class DataInsertUiState(
   val isRecipeButtonEnabled: Boolean = false,
 
   val restaurantName: String = "",
+  val restaurantDetail: String = "",
+  val restaurantAddress: String = "",
+  val restaurantPhoto: String = "",
   val isRestaurantButtonEnabled: Boolean = false
 )

@@ -34,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.vegsty.data.remote.dto.Goal
 import com.app.vegsty.data.remote.dto.Recipe
+import com.app.vegsty.data.remote.dto.Restaurant
 import com.app.vegsty.ui.components.BottomBar
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
@@ -61,8 +62,7 @@ import com.app.vegsty.ui.screens.profile.main.ProfileViewModel
 import com.app.vegsty.ui.screens.profile.settings.SettingsScreen
 import com.app.vegsty.ui.screens.profile.settings.SettingsViewModel
 import com.app.vegsty.ui.screens.profile.terms.TermsScreen
-import com.app.vegsty.ui.screens.restaurants.detail.FirstRestaurantScreen
-import com.app.vegsty.ui.screens.restaurants.detail.SecondRestaurantScreen
+import com.app.vegsty.ui.screens.restaurants.detail.RestaurantDetailScreen
 import com.app.vegsty.ui.screens.restaurants.main.RestaurantScreen
 import com.app.vegsty.ui.screens.restaurants.main.RestaurantViewModel
 import com.app.vegsty.ui.screens.splash.SplashScreen
@@ -195,22 +195,31 @@ class MainActivity : ComponentActivity() {
               val restaurantViewModel: RestaurantViewModel = hiltViewModel()
 
               RestaurantScreen(
+                uiStateFlow = restaurantViewModel.uiState,
                 uiEventFlow = restaurantViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
                 },
                 onEvent = {
                   restaurantViewModel.onEvent(it)
-                }
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
+                },
+
+                )
+            }
+
+            composable(Route.SCREEN_RESTAURANT_DETAIL.name) { currentStackEntry ->
+              RestaurantDetailScreen(
+                restaurant = currentStackEntry.savedStateHandle.get<Restaurant>(RouteArgument.ARG_RESTAURANT_DETAIL.name)
               )
-            }
-
-            composable(Route.SCREEN_FIRST_RESTAURANT.name) {
-              FirstRestaurantScreen()
-            }
-
-            composable(Route.SCREEN_SECOND_RESTAURANT.name) {
-              SecondRestaurantScreen()
             }
 
             composable(Route.SCREEN_SEARCH.name) {

@@ -7,5 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Restaurant(
   var id: String = "",
   val name: String = "",
-  val type: RestaurantType
+  val detail: String = "",
+  val address: String = "",
+  val photo: String = ""
 ) : Parcelable

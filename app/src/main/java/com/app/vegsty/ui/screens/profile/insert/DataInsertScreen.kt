@@ -342,6 +342,87 @@ fun DataInsertScreen(
             .fillMaxWidth(),
           keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+          ),
+          singleLine = true,
+          maxLines = 1,
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+          ),
+          textStyle = MaterialTheme.typography.titleMedium
+        )
+
+        OutlinedTextField(
+          value = uiState.restaurantDetail,
+          label = {
+            Text(
+              text = stringResource(id = R.string.data_insert_label_restaurant_detail),
+              style = MaterialTheme.typography.titleMedium
+            )
+          },
+          onValueChange = {
+            onEvent(DataInsertUiEvent.OnUpdateRestaurantDetail(it))
+          },
+          modifier = Modifier
+            .padding(top = 4.dp)
+            .fillMaxWidth(),
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+          ),
+          singleLine = true,
+          maxLines = 1,
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+          ),
+          textStyle = MaterialTheme.typography.titleMedium
+        )
+
+        OutlinedTextField(
+          value = uiState.restaurantAddress,
+          label = {
+            Text(
+              text = stringResource(id = R.string.data_insert_label_restaurant_address),
+              style = MaterialTheme.typography.titleMedium
+            )
+          },
+          onValueChange = {
+            onEvent(DataInsertUiEvent.OnUpdateRestaurantAddress(it))
+          },
+          modifier = Modifier
+            .padding(top = 4.dp)
+            .fillMaxWidth(),
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+          ),
+          singleLine = true,
+          maxLines = 1,
+          colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+          ),
+          textStyle = MaterialTheme.typography.titleMedium
+        )
+
+        OutlinedTextField(
+          value = uiState.restaurantPhoto,
+          label = {
+            Text(
+              text = stringResource(id = R.string.data_insert_label_restaurant_photo),
+              style = MaterialTheme.typography.titleMedium
+            )
+          },
+          onValueChange = {
+            onEvent(DataInsertUiEvent.OnUpdateRestaurantPhoto(it))
+          },
+          modifier = Modifier
+            .padding(top = 4.dp)
+            .fillMaxWidth(),
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Done
           ),
           singleLine = true,

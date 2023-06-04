@@ -11,4 +11,7 @@ sealed class DataInsertUiEvent {
   data class OnUpdateRecipeFat(val recipeFat: String) : DataInsertUiEvent()
   data class OnUpdateRecipeCarbs(val recipeCarbs: String) : DataInsertUiEvent()
   data class OnUpdateRestaurantName(val restaurantName: String) : DataInsertUiEvent()
+  data class OnUpdateRestaurantDetail(val restaurantDetail: String) : DataInsertUiEvent()
+  data class OnUpdateRestaurantAddress(val restaurantAddress: String) : DataInsertUiEvent()
+  data class OnUpdateRestaurantPhoto(val restaurantPhoto: String) : DataInsertUiEvent()
 }

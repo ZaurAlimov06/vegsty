@@ -75,26 +75,6 @@ class MainRepositoryImpl(
     }
   }
 
-  override suspend fun searchRecipes(searchText: String): Response<List<Recipe>> {
-    return try {
-      val response = databaseReference.child("recipes").get().await()
-
-      val responseList = mutableListOf<Recipe>()
-
-      if (response.exists()) {
-        for (recipeSnapshot in response.children) {
-          val recipe = recipeSnapshot.getValue(Recipe::class.java)
-          recipe?.let {
-            responseList.add(recipe)
-          }
-        }
-      }
-      Response.Success(responseList)
-    } catch (e: Exception) {
-      Response.Fail(e)
-    }
-  }
-
   override suspend fun insertRecipe(recipe: Recipe): Response<Unit> {
     return try {
       databaseReference.child("recipes").push().apply {
@@ -120,6 +100,26 @@ class MainRepositoryImpl(
       }
 
       Response.Success(Unit)
+    } catch (e: Exception) {
+      Response.Fail(e)
+    }
+  }
+
+  override suspend fun getAllRestaurants(): Response<List<Restaurant>> {
+    return try {
+      val response = databaseReference.child("restaurants").get().await()
+
+      val responseList = mutableListOf<Restaurant>()
+
+      if (response.exists()) {
+        for (recipeSnapshot in response.children) {
+          val recipe = recipeSnapshot.getValue(Restaurant::class.java)
+          recipe?.let {
+            responseList.add(recipe)
+          }
+        }
+      }
+      Response.Success(responseList)
     } catch (e: Exception) {
       Response.Fail(e)
     }

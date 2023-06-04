@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.vegsty.data.remote.dto.Recipe
 import com.app.vegsty.data.remote.dto.Restaurant
-import com.app.vegsty.data.remote.dto.RestaurantType
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
@@ -57,6 +56,15 @@ class DataInsertViewModel @Inject constructor(
       is DataInsertUiEvent.OnUpdateRestaurantName -> {
         onUpdateRestaurantName(dataInsertUiEvent.restaurantName)
       }
+      is DataInsertUiEvent.OnUpdateRestaurantAddress -> {
+        onUpdateRestaurantAddress(dataInsertUiEvent.restaurantAddress)
+      }
+      is DataInsertUiEvent.OnUpdateRestaurantDetail -> {
+        onUpdateRestaurantDetail(dataInsertUiEvent.restaurantDetail)
+      }
+      is DataInsertUiEvent.OnUpdateRestaurantPhoto -> {
+        onUpdateRestaurantPhoto(dataInsertUiEvent.restaurantPhoto)
+      }
     }
   }
 
@@ -91,8 +99,7 @@ class DataInsertViewModel @Inject constructor(
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
       val restaurant = Restaurant(
-        name = _uiState.value.restaurantName,
-        type = RestaurantType.VEGAN
+        name = _uiState.value.restaurantName
       )
 
       when (val result = mainRepository.insertRestaurant(restaurant)) {
@@ -191,6 +198,39 @@ class DataInsertViewModel @Inject constructor(
       _uiState.update { currentState ->
         currentState.copy(
           restaurantName = restaurantName
+        )
+      }
+      onUpdateRestaurantButtonEnabled()
+    }
+  }
+
+  private fun onUpdateRestaurantDetail(restaurantDetail: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          restaurantDetail = restaurantDetail
+        )
+      }
+      onUpdateRestaurantButtonEnabled()
+    }
+  }
+
+  private fun onUpdateRestaurantAddress(restaurantAddress: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          restaurantAddress = restaurantAddress
+        )
+      }
+      onUpdateRestaurantButtonEnabled()
+    }
+  }
+
+  private fun onUpdateRestaurantPhoto(restaurantPhoto: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          restaurantPhoto = restaurantPhoto
         )
       }
       onUpdateRestaurantButtonEnabled()

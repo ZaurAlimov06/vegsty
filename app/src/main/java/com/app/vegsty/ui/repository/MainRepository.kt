@@ -11,9 +11,9 @@ interface MainRepository {
   suspend fun registerUser(userName: String, email: String, password: String): Response<AuthResult>
   suspend fun updateUser(userName: String): Response<Unit>
   suspend fun getAllRecipes(): Response<List<Recipe>>
-  suspend fun searchRecipes(searchText: String): Response<List<Recipe>>
   suspend fun insertRecipe(recipe: Recipe): Response<Unit>
   suspend fun insertRestaurant(restaurant: Restaurant): Response<Unit>
+  suspend fun getAllRestaurants(): Response<List<Restaurant>>
   suspend fun logoutUser(): Response<Unit>
 
   suspend fun saveFavoriteRecipe(recipe: Recipe): Response<Unit>
