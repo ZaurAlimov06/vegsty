@@ -139,9 +139,34 @@ class MainRepositoryImpl(
     }
   }
 
+  override suspend fun sendRecipeStatistic(): Response<Unit> {
+    return try {
+      databaseReference.child("users")
+        .child(firebaseAuth.currentUser?.uid.toString())
+        .child("recipes").setValue(recipeDao.getAllFavoriteRecipes().size).await()
+
+      Response.Success(Unit)
+    } catch (e: Exception) {
+      Response.Fail(e)
+    }
+  }
+
+  override suspend fun sendGoalStatistic(): Response<Unit> {
+    return try {
+      databaseReference.child("users")
+        .child(firebaseAuth.currentUser?.uid.toString())
+        .child("goals").setValue(goalDao.getAllGoals().size).await()
+
+      Response.Success(Unit)
+    } catch (e: Exception) {
+      Response.Fail(e)
+    }
+  }
+
   override suspend fun saveFavoriteRecipe(recipe: Recipe): Response<Unit> {
     return try {
       recipeDao.insertFavoriteRecipe(recipe)
+      sendRecipeStatistic()
 
       Response.Success(Unit)
     } catch (e: Exception) {
@@ -170,6 +195,7 @@ class MainRepositoryImpl(
   override suspend fun saveGoal(goal: Goal): Response<Unit> {
     return try {
       goalDao.insertGoal(goal)
+      sendGoalStatistic()
 
       Response.Success(Unit)
     } catch (e: Exception) {

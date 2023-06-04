@@ -15,6 +15,8 @@ interface MainRepository {
   suspend fun insertRestaurant(restaurant: Restaurant): Response<Unit>
   suspend fun getAllRestaurants(): Response<List<Restaurant>>
   suspend fun logoutUser(): Response<Unit>
+  suspend fun sendRecipeStatistic(): Response<Unit>
+  suspend fun sendGoalStatistic(): Response<Unit>
 
   suspend fun saveFavoriteRecipe(recipe: Recipe): Response<Unit>
   suspend fun getAllFavoriteRecipes(): Response<List<Recipe?>>
