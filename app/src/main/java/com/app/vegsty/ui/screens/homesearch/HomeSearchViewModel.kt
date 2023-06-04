@@ -34,6 +34,9 @@ class HomeSearchViewModel @Inject constructor(
       is HomeUiEvent.GetAllRecipes -> {
         getAllRecipes()
       }
+      is HomeUiEvent.OnSearch -> {
+        filterRecipes(homeUiEvent.searchText)
+      }
     }
   }
 
@@ -47,10 +50,15 @@ class HomeSearchViewModel @Inject constructor(
           _uiEvent.send(UiEvent.HideLoading)
         }
         is Response.Success -> {
-          _uiState.update { currentState ->
-            currentState.copy(
-              recipeList = result.result
-            )
+          if (_uiState.value.searchText.isEmpty()) {
+            _uiState.update { currentState ->
+              currentState.copy(
+                recipeList = result.result,
+                filteredRecipeList = result.result
+              )
+            }
+          } else {
+            filterRecipes(_uiState.value.searchText)
           }
 
           _uiEvent.send(UiEvent.HideLoading)
@@ -70,6 +78,23 @@ class HomeSearchViewModel @Inject constructor(
           )
         )
       )
+    }
+  }
+
+  private fun filterRecipes(searchText: String) {
+    viewModelScope.launch(ExceptionHandler.handler) {
+      _uiState.update { currentState ->
+        currentState.copy(
+          searchText = searchText,
+          filteredRecipeList = if (searchText.isEmpty()) {
+            _uiState.value.recipeList
+          } else {
+            _uiState.value.recipeList.filter { item ->
+              item.title.contains(searchText, ignoreCase = true)
+            }
+          }
+        )
+      }
     }
   }
 }

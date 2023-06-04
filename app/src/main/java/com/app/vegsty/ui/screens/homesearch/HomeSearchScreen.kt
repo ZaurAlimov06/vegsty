@@ -3,7 +3,10 @@ package com.app.vegsty.ui.screens.homesearch
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,10 +37,6 @@ fun HomeSearchScreen(
   spacing: Dimension = LocalSpacing.current
 ) {
   val uiState by uiStateFlow.collectAsState()
-
-  var searchState by remember {
-    mutableStateOf("")
-  }
 
   LaunchedEffect(true) {
     onEvent(HomeUiEvent.GetAllRecipes)
@@ -74,10 +73,10 @@ fun HomeSearchScreen(
   ) {
 
     OutlinedTextField(
-      value = searchState,
+      value = uiState.searchText,
       placeholder = { Text(stringResource(id = R.string.homesearch_label_search)) },
       onValueChange = {
-        searchState = it
+        onEvent(HomeUiEvent.OnSearch(it))
       },
       shape = MaterialTheme.shapes.large,
       modifier = Modifier
@@ -106,9 +105,9 @@ fun HomeSearchScreen(
       verticalArrangement = Arrangement.spacedBy(spacing.spaceListItemPadding)
     ) {
 
-      items(uiState.recipeList.size) { index ->
+      items(uiState.filteredRecipeList.size) { index ->
         RecipeListItem(
-          recipe = uiState.recipeList[index],
+          recipe = uiState.filteredRecipeList[index],
           onRecipeClick = {
             onEvent(HomeUiEvent.OnRecipeClick(it))
           }
