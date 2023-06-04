@@ -26,14 +26,13 @@ class HomeSearchViewModel @Inject constructor(
   private val _uiEvent = Channel<UiEvent>()
   val uiEvent = _uiEvent.receiveAsFlow()
 
-  init {
-    getAllRecipes()
-  }
-
   fun onEvent(homeUiEvent: HomeUiEvent) {
     when (homeUiEvent) {
       is HomeUiEvent.OnRecipeClick -> {
         navigateToDetail(homeUiEvent.recipe)
+      }
+      is HomeUiEvent.GetAllRecipes -> {
+        getAllRecipes()
       }
     }
   }

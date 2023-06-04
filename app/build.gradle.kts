@@ -81,6 +81,8 @@ dependencies {
   implementation("com.google.firebase:firebase-auth-ktx")
   implementation("com.google.firebase:firebase-database-ktx")
   implementation("com.github.skydoves:landscapist-glide:2.1.0")
+  implementation("androidx.room:room-runtime:2.5.1")
+  implementation("androidx.room:room-ktx:2.5.1")
 
   debugImplementation("androidx.compose.ui:ui-tooling")
   debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -93,4 +95,5 @@ dependencies {
   androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
   kapt("com.google.dagger:hilt-android-compiler:2.44")
+  kapt("androidx.room:room-compiler:2.5.1")
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.vegsty.data.remote.dto.Recipe
 import com.app.vegsty.data.remote.dto.Restaurant
+import com.app.vegsty.data.remote.dto.RestaurantType
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
@@ -90,7 +91,8 @@ class DataInsertViewModel @Inject constructor(
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
       val restaurant = Restaurant(
-        name = _uiState.value.restaurantName
+        name = _uiState.value.restaurantName,
+        type = RestaurantType.VEGAN
       )
 
       when (val result = mainRepository.insertRestaurant(restaurant)) {

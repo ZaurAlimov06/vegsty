@@ -3,7 +3,6 @@ package com.app.vegsty.ui.screens.welcome
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
@@ -18,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
-  private val mainRepository: MainRepository,
-  private val mainLocal: MainLocal
+  private val mainRepository: MainRepository
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(WelcomeUiState())
   val uiState: StateFlow<WelcomeUiState> = _uiState.asStateFlow()
@@ -78,9 +76,9 @@ class WelcomeViewModel @Inject constructor(
           _uiEvent.send(UiEvent.HideLoading)
         }
         is Response.Success -> {
-          mainLocal.saveUsername(result.result.user?.displayName)
-          mainLocal.saveEmail(_uiState.value.loginEmail)
-          mainLocal.savePassword(_uiState.value.loginPassword)
+          mainRepository.saveUsername(result.result.user?.displayName)
+          mainRepository.saveEmail(_uiState.value.loginEmail)
+          mainRepository.savePassword(_uiState.value.loginPassword)
 
           _uiEvent.send(
             UiEvent.Navigate(

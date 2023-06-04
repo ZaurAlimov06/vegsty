@@ -1,4 +1,4 @@
-package com.app.vegsty.data.local
+package com.app.vegsty.data.local.preferences
 
 interface MainLocal {
   fun saveTheme(isDark: Boolean)

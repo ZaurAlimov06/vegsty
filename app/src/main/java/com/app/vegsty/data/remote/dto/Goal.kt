@@ -7,14 +7,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
-data class Recipe(
+data class Goal(
   @PrimaryKey
-  var id: String = "",
-  val imgUrl: String = "",
-  val detail: String = "",
   val title: String = "",
   val protein: String = "",
   val calorie: String = "",
   val fat: String = "",
-  val carbs: String = ""
+  val carbs: String = "",
+  val date: String = ""
 ) : Parcelable

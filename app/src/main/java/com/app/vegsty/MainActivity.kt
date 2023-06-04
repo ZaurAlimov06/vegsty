@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,8 @@ import com.app.vegsty.ui.route.RouteArgument
 import com.app.vegsty.ui.screens.detail.DetailScreen
 import com.app.vegsty.ui.screens.favorites.FavoritesScreen
 import com.app.vegsty.ui.screens.favorites.FavoritesViewModel
+import com.app.vegsty.ui.screens.goals.insert.GoalInsertScreen
+import com.app.vegsty.ui.screens.goals.insert.GoalInsertViewModel
 import com.app.vegsty.ui.screens.goals.main.GoalsScreen
 import com.app.vegsty.ui.screens.goals.main.GoalsViewModel
 import com.app.vegsty.ui.screens.homesearch.HomeSearchScreen
@@ -245,9 +248,22 @@ class MainActivity : ComponentActivity() {
               val goalsViewModel: GoalsViewModel = hiltViewModel()
 
               GoalsScreen(
+                uiStateFlow = goalsViewModel.uiState,
                 uiEventFlow = goalsViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
+                },
+                onEvent = {
+                  goalsViewModel.onEvent(it)
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
                 }
               )
             }
@@ -353,20 +369,45 @@ class MainActivity : ComponentActivity() {
                 }
               )
             }
-          }
 
-          if (isLoading.value) {
-            Box(
-              modifier = Modifier
-                .fillMaxSize()
-            ) {
-              CircularProgressIndicator(
-                modifier = Modifier
-                  .align(Alignment.Center)
-                  .size(50.dp),
-                color = MaterialTheme.colorScheme.tertiary
+            composable(Route.SCREEN_GOAL_ADD.name) {
+              val goalsInsertViewModel: GoalInsertViewModel = hiltViewModel()
+
+              GoalInsertScreen(
+                uiStateFlow = goalsInsertViewModel.uiState,
+                uiEventFlow = goalsInsertViewModel.uiEvent,
+                onNavigate = { navigationType, data ->
+                  navController.handleNavigation(navigationType, data)
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
+                },
+                onEvent = {
+                  goalsInsertViewModel.onEvent(it)
+                }
               )
             }
+          }
+        }
+
+        if (isLoading.value) {
+          Box(
+            modifier = Modifier
+              .fillMaxSize()
+              .clickable(enabled = false, onClick = {})
+          ) {
+            CircularProgressIndicator(
+              modifier = Modifier
+                .align(Alignment.Center)
+                .size(50.dp),
+              color = MaterialTheme.colorScheme.tertiary
+            )
           }
         }
       }
@@ -389,38 +430,57 @@ class MainActivity : ComponentActivity() {
       is NavigationType.BottomBarNavigate -> {
         navigationType.route
       }
-    }
-
-    navigate(
-      route = route
-    ) {
-      when (navigationType) {
-        is NavigationType.ClearBackStackNavigate -> {
-          val popUpRoute = navigationType.popUpRoute
-          if (popUpRoute != null) {
-            popUpTo(popUpRoute)
-          } else {
-            popUpTo(0)
-          }
-        }
-
-        is NavigationType.BottomBarNavigate -> {
-          popUpTo(Route.SCREEN_SEARCH.name) {
-            saveState = true
-          }
-          launchSingleTop = true
-          restoreState = true
-        }
-
-        else -> {}
+      is NavigationType.PopBack -> {
+        navigationType.route
       }
     }
-    getBackStackEntry(route = route).apply {
-      data?.forEach { (key, value) ->
-        savedStateHandle.set(
-          key = key,
-          value = value
-        )
+
+    when (navigationType) {
+      is NavigationType.PopBack -> {
+        previousBackStackEntry?.apply {
+          data?.forEach { (key, value) ->
+            savedStateHandle.set(
+              key = key,
+              value = value
+            )
+          }
+        }
+        popBackStack()
+
+      }
+      else -> {
+        navigate(
+          route = route
+        ) {
+          when (navigationType) {
+            is NavigationType.ClearBackStackNavigate -> {
+              val popUpRoute = navigationType.popUpRoute
+              if (popUpRoute != null) {
+                popUpTo(popUpRoute)
+              } else {
+                popUpTo(0)
+              }
+            }
+
+            is NavigationType.BottomBarNavigate -> {
+              popUpTo(Route.SCREEN_SEARCH.name) {
+                saveState = true
+              }
+              launchSingleTop = true
+              restoreState = true
+            }
+
+            else -> {}
+          }
+        }
+        getBackStackEntry(route = route).apply {
+          data?.forEach { (key, value) ->
+            savedStateHandle.set(
+              key = key,
+              value = value
+            )
+          }
+        }
       }
     }
   }

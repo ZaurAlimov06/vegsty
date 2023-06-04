@@ -2,12 +2,11 @@ package com.app.vegsty.ui.screens.profile.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
 import com.app.vegsty.ui.model.UiEvent
+import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-  private val firebaseAuth: FirebaseAuth,
-  private val mainLocal: MainLocal
+  private val mainRepository: MainRepository
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(ProfileUiState())
   val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
@@ -75,11 +73,7 @@ class ProfileViewModel @Inject constructor(
       _uiEvent.send(UiEvent.ShowLoading)
 
       try {
-        firebaseAuth.signOut()
-
-        mainLocal.deleteUsername()
-        mainLocal.deleteEmail()
-        mainLocal.deletePassword()
+        mainRepository.logoutUser()
 
         _uiEvent.send(
           UiEvent.Navigate(
@@ -123,7 +117,7 @@ class ProfileViewModel @Inject constructor(
 
   private fun getUserName() {
     viewModelScope.launch(ExceptionHandler.handler) {
-      onUpdateUsername(mainLocal.getUsername())
+      onUpdateUsername(mainRepository.getUsername())
     }
   }
 

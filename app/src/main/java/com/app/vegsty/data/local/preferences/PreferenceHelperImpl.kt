@@ -1,4 +1,4 @@
-package com.app.vegsty.data.local
+package com.app.vegsty.data.local.preferences
 
 import android.content.SharedPreferences
 import com.app.vegsty.ui.repository.PreferenceHelper

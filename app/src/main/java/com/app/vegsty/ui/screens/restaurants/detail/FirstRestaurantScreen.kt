@@ -21,49 +21,49 @@ import com.app.vegsty.ui.theme.VegstyTheme
 
 @Composable
 fun FirstRestaurantScreen(
-    spacing: Dimension = LocalSpacing.current
+  spacing: Dimension = LocalSpacing.current
 ) {
-    Column(
-        modifier = Modifier
-            .padding(
-                horizontal = spacing.spaceScreenHorizontalPadding,
-                vertical = spacing.spaceScreenVerticalPadding
-            )
+  Column(
+    modifier = Modifier
+      .padding(
+        horizontal = spacing.spaceScreenHorizontalPadding,
+        vertical = spacing.spaceScreenVerticalPadding
+      )
+  ) {
+    LazyColumn(
+      modifier = Modifier
+        .fillMaxSize()
+        .weight(1.0f),
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1.0f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
-            item {
+      item {
 
-                Text(
-                    text = stringResource(id = R.string.first_restaurant_text),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Text(
-                    text = stringResource(id = R.string.first_restaurant_address),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        }
+        Text(
+          text = stringResource(id = R.string.first_restaurant_text),
+          textAlign = TextAlign.Center,
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+          style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+          text = stringResource(id = R.string.first_restaurant_address),
+          textAlign = TextAlign.Center,
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+          style = MaterialTheme.typography.bodyMedium,
+        )
+      }
     }
+  }
 }
 
 @Composable
 @Preview(showBackground = true)
 fun PreviewFirstRestaurantScreen() {
-    VegstyTheme {
-        FirstRestaurantScreen()
-    }
+  VegstyTheme {
+    FirstRestaurantScreen()
+  }
 }

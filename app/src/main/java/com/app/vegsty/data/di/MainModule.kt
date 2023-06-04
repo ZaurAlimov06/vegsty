@@ -1,12 +1,16 @@
 package com.app.vegsty.data.di
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.app.vegsty.data.local.MainLocal
-import com.app.vegsty.data.local.MainLocalImpl
-import com.app.vegsty.data.local.PreferenceHelperImpl
+import com.app.vegsty.data.local.preferences.MainLocal
+import com.app.vegsty.data.local.preferences.MainLocalImpl
+import com.app.vegsty.data.local.preferences.PreferenceHelperImpl
+import com.app.vegsty.data.local.room.MainDao
+import com.app.vegsty.data.local.room.VegstyDB
 import com.app.vegsty.data.repository.MainRepositoryImpl
 import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.repository.PreferenceHelper
@@ -18,12 +22,23 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object MainModule {
+  @Provides
+  @Singleton
+  fun provideVegstyAppDB(@ApplicationContext appContext: Context): VegstyDB = Room.databaseBuilder(
+    appContext,
+    VegstyDB::class.java,
+    "vegsty.db"
+  ).fallbackToDestructiveMigration().build()
+
+  @Provides
+  fun provideMainDao(vegstyDB: VegstyDB): MainDao = vegstyDB.mainDao()
 
   @Provides
   @Singleton
@@ -76,10 +91,12 @@ object MainModule {
   @Singleton
   fun provideMainRepository(
     firebaseAuth: FirebaseAuth,
-    databaseReference: DatabaseReference
+    databaseReference: DatabaseReference,
+    mainLocal: MainLocal,
+    mainDao: MainDao
   ): MainRepository {
     return MainRepositoryImpl(
-      firebaseAuth, databaseReference
+      firebaseAuth, databaseReference, mainLocal, mainDao
     )
   }
 }

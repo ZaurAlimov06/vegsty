@@ -2,24 +2,22 @@ package com.app.vegsty.ui.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
+import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
+import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
 import com.app.vegsty.ui.route.RouteArgument
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-  private val firebaseAuth: FirebaseAuth,
-  private val mainLocal: MainLocal
+  private val mainRepository: MainRepository
 ) : ViewModel() {
   private val _uiEvent = Channel<UiEvent>()
   val uiEvent = _uiEvent.receiveAsFlow()
@@ -30,9 +28,16 @@ class SplashViewModel @Inject constructor(
 
   private fun startSplashTimer() {
     viewModelScope.launch(ExceptionHandler.handler) {
-      if (mainLocal.containOnboardState()) {
-        if (mainLocal.containsLoginInfo()) {
-          firebaseAuth.signInWithEmailAndPassword(mainLocal.getEmail(), mainLocal.getPassword()).await()
+      if (mainRepository.containOnboardState()) {
+        if (mainRepository.containsLoginInfo()) {
+          when (val result = mainRepository.loginUser(mainRepository.getEmail(), mainRepository.getPassword())) {
+            is Response.Fail -> {
+
+            }
+            is Response.Success -> {
+
+            }
+          }
 
           _uiEvent.send(
             UiEvent.Navigate(
@@ -51,7 +56,7 @@ class SplashViewModel @Inject constructor(
           )
         }
       } else {
-        mainLocal.saveOnboardState()
+        mainRepository.saveOnboardState()
 
         _uiEvent.send(
           UiEvent.Navigate(
@@ -61,7 +66,7 @@ class SplashViewModel @Inject constructor(
         )
       }
 
-      onChangeTheme(mainLocal.getTheme())
+      onChangeTheme(mainRepository.getTheme())
     }
   }
 

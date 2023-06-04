@@ -2,22 +2,19 @@ package com.app.vegsty.ui.screens.profile.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.vegsty.data.local.MainLocal
 import com.app.vegsty.ui.model.ExceptionHandler
+import com.app.vegsty.ui.model.Response
 import com.app.vegsty.ui.model.UiEvent
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.app.vegsty.ui.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-  private val firebaseAuth: FirebaseAuth,
-  private val mainLocal: MainLocal
+  private val mainRepository: MainRepository
 ) : ViewModel() {
   private val _uiState = MutableStateFlow(EditProfileUiState())
   val uiState: StateFlow<EditProfileUiState> = _uiState.asStateFlow()
@@ -42,7 +39,7 @@ class EditProfileViewModel @Inject constructor(
 
   private fun getUsername() {
     viewModelScope.launch(ExceptionHandler.handler) {
-      onUpdateUsername(mainLocal.getUsername())
+      onUpdateUsername(mainRepository.getUsername())
     }
   }
 
@@ -59,23 +56,17 @@ class EditProfileViewModel @Inject constructor(
   private fun onUpdateRemoteUsername() {
     viewModelScope.launch(ExceptionHandler.handler) {
       _uiEvent.send(UiEvent.ShowLoading)
-
-      try {
-        val user = firebaseAuth.currentUser
-        user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(_uiState.value.userName).build())?.await()
-
-        mainLocal.saveUsername(user?.displayName)
-
-        _uiEvent.send(
-          UiEvent.ShowLongToast("Username successfully updated!")
-        )
-        _uiEvent.send(UiEvent.HideLoading)
-      } catch (e: Exception) {
-        _uiEvent.send(
-          UiEvent.ShowShortToast(e.message)
-        )
-
-        _uiEvent.send(UiEvent.HideLoading)
+      when (val result = mainRepository.updateUser(_uiState.value.userName)) {
+        is Response.Fail -> {
+          _uiEvent.send(UiEvent.ShowShortToast(result.exception.message))
+          _uiEvent.send(UiEvent.HideLoading)
+        }
+        is Response.Success -> {
+          _uiEvent.send(
+            UiEvent.ShowLongToast("Username successfully updated!")
+          )
+          _uiEvent.send(UiEvent.HideLoading)
+        }
       }
     }
   }

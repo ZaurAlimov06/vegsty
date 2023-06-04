@@ -40,6 +40,8 @@ fun HomeSearchScreen(
   }
 
   LaunchedEffect(true) {
+    onEvent(HomeUiEvent.GetAllRecipes)
+
     uiEventFlow.collect { event ->
       when (event) {
         is UiEvent.Navigate<*> -> {
