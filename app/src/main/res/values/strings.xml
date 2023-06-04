@@ -120,6 +120,9 @@ Thank you for choosing Vegsty as your companion on your vegan or vegetarian jour
   <string name="data_insert_label_restaurant_name">Name</string>
   <string name="data_insert_button_insert_restaurant">Insert Restaurant</string>
 
+  <!--    Detail Screen-->
+  <string name="detail_button_add_to_favorites">Add to Favorites</string>
+
   <!--    Common Strings-->
   <string name="common_icon_content_description">Icon</string>
   <string name="common_image_reload_text">Tap to reload</string>

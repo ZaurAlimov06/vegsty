@@ -1,7 +1,8 @@
 package com.app.vegsty.data.repository
 
 import com.app.vegsty.data.local.preferences.MainLocal
-import com.app.vegsty.data.local.room.MainDao
+import com.app.vegsty.data.local.room.GoalDao
+import com.app.vegsty.data.local.room.RecipeDao
 import com.app.vegsty.data.remote.dto.Goal
 import com.app.vegsty.data.remote.dto.Recipe
 import com.app.vegsty.data.remote.dto.Restaurant
@@ -17,7 +18,8 @@ class MainRepositoryImpl(
   private val firebaseAuth: FirebaseAuth,
   private val databaseReference: DatabaseReference,
   private val mainLocal: MainLocal,
-  private val mainDao: MainDao
+  private val goalDao: GoalDao,
+  private val recipeDao: RecipeDao
 ) : MainRepository {
   override suspend fun loginUser(email: String, password: String): Response<AuthResult> {
     return try {
@@ -139,7 +141,7 @@ class MainRepositoryImpl(
 
   override suspend fun saveFavoriteRecipe(recipe: Recipe): Response<Unit> {
     return try {
-      mainDao.insertFavoriteRecipe(recipe)
+      recipeDao.insertFavoriteRecipe(recipe)
 
       Response.Success(Unit)
     } catch (e: Exception) {
@@ -149,7 +151,7 @@ class MainRepositoryImpl(
 
   override suspend fun getAllFavoriteRecipes(): Response<List<Recipe?>> {
     return try {
-      Response.Success(mainDao.getAllFavoriteRecipes())
+      Response.Success(recipeDao.getAllFavoriteRecipes())
     } catch (e: Exception) {
       Response.Fail(e)
     }
@@ -157,7 +159,7 @@ class MainRepositoryImpl(
 
   override suspend fun deleteFavoriteRecipe(recipe: Recipe): Response<Unit> {
     return try {
-      mainDao.deleteFavoriteRecipe(recipe)
+      recipeDao.deleteFavoriteRecipe(recipe)
 
       Response.Success(Unit)
     } catch (e: Exception) {
@@ -167,7 +169,7 @@ class MainRepositoryImpl(
 
   override suspend fun saveGoal(goal: Goal): Response<Unit> {
     return try {
-      mainDao.insertGoal(goal)
+      goalDao.insertGoal(goal)
 
       Response.Success(Unit)
     } catch (e: Exception) {
@@ -177,7 +179,7 @@ class MainRepositoryImpl(
 
   override suspend fun getAllGoals(): Response<List<Goal?>> {
     return try {
-      Response.Success(mainDao.getAllGoals())
+      Response.Success(goalDao.getAllGoals())
     } catch (e: Exception) {
       Response.Fail(e)
     }
@@ -185,7 +187,7 @@ class MainRepositoryImpl(
 
   override suspend fun deleteGoal(goal: Goal): Response<Unit> {
     return try {
-      mainDao.deleteGoal(goal)
+      goalDao.deleteGoal(goal)
 
       Response.Success(Unit)
     } catch (e: Exception) {

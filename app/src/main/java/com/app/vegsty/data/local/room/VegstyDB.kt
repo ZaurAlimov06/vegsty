@@ -9,5 +9,6 @@ import com.app.vegsty.data.remote.dto.Recipe
   entities = [Recipe::class, Goal::class], version = 1, exportSchema = false
 )
 abstract class VegstyDB : RoomDatabase() {
-  abstract fun mainDao(): MainDao
+  abstract fun goalDao(): GoalDao
+  abstract fun recipeDao(): RecipeDao
 }

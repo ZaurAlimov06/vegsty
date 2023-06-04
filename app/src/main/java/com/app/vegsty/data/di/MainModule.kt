@@ -9,7 +9,8 @@ import androidx.security.crypto.MasterKeys
 import com.app.vegsty.data.local.preferences.MainLocal
 import com.app.vegsty.data.local.preferences.MainLocalImpl
 import com.app.vegsty.data.local.preferences.PreferenceHelperImpl
-import com.app.vegsty.data.local.room.MainDao
+import com.app.vegsty.data.local.room.GoalDao
+import com.app.vegsty.data.local.room.RecipeDao
 import com.app.vegsty.data.local.room.VegstyDB
 import com.app.vegsty.data.repository.MainRepositoryImpl
 import com.app.vegsty.ui.repository.MainRepository
@@ -38,7 +39,10 @@ object MainModule {
   ).fallbackToDestructiveMigration().build()
 
   @Provides
-  fun provideMainDao(vegstyDB: VegstyDB): MainDao = vegstyDB.mainDao()
+  fun provideGoalDao(vegstyDB: VegstyDB): GoalDao = vegstyDB.goalDao()
+
+  @Provides
+  fun provideRecipeDao(vegstyDB: VegstyDB): RecipeDao = vegstyDB.recipeDao()
 
   @Provides
   @Singleton
@@ -93,10 +97,11 @@ object MainModule {
     firebaseAuth: FirebaseAuth,
     databaseReference: DatabaseReference,
     mainLocal: MainLocal,
-    mainDao: MainDao
+    goalDao: GoalDao,
+    recipeDao: RecipeDao
   ): MainRepository {
     return MainRepositoryImpl(
-      firebaseAuth, databaseReference, mainLocal, mainDao
+      firebaseAuth, databaseReference, mainLocal, goalDao, recipeDao
     )
   }
 }

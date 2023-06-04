@@ -65,7 +65,8 @@ class HomeSearchViewModel @Inject constructor(
         UiEvent.Navigate(
           navigationType = NavigationType.Navigate(Route.SCREEN_HOME_RECIPE_DETAIL.name),
           data = mapOf(
-            RouteArgument.ARG_HOME_RECIPE_DETAIL.name to recipe
+            RouteArgument.ARG_HOME_RECIPE_DETAIL.name to recipe,
+            RouteArgument.ARG_DETAIL_IS_FROM_HOME.name to true
           )
         )
       )

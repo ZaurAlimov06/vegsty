@@ -39,6 +39,7 @@ import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
 import com.app.vegsty.ui.route.RouteArgument
 import com.app.vegsty.ui.screens.detail.DetailScreen
+import com.app.vegsty.ui.screens.detail.DetailViewModel
 import com.app.vegsty.ui.screens.favorites.FavoritesScreen
 import com.app.vegsty.ui.screens.favorites.FavoritesViewModel
 import com.app.vegsty.ui.screens.goals.detail.GoalDetailScreen
@@ -237,11 +238,23 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(Route.SCREEN_HOME_RECIPE_DETAIL.name) { currentStackEntry ->
+              val detailViewModel: DetailViewModel = hiltViewModel()
 
               DetailScreen(
+                uiEventFlow = detailViewModel.uiEvent,
                 recipe = currentStackEntry.savedStateHandle.get<Recipe>(RouteArgument.ARG_HOME_RECIPE_DETAIL.name),
-                onNavigate = { navigationType, data ->
-                  navController.handleNavigation(navigationType, data)
+                isFromHome = currentStackEntry.savedStateHandle.get<Boolean>(RouteArgument.ARG_DETAIL_IS_FROM_HOME.name) ?: true,
+                onEvent = {
+                  detailViewModel.onEvent(it)
+                },
+                showShortToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                },
+                showLongToast = {
+                  Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+                },
+                updateLoading = {
+                  isLoading.value = it
                 }
               )
             }
@@ -274,9 +287,13 @@ class MainActivity : ComponentActivity() {
               val favoritesViewModel: FavoritesViewModel = hiltViewModel()
 
               FavoritesScreen(
+                uiStateFlow = favoritesViewModel.uiState,
                 uiEventFlow = favoritesViewModel.uiEvent,
                 onNavigate = { navigationType, data ->
                   navController.handleNavigation(navigationType, data)
+                },
+                onEvent = {
+                  favoritesViewModel.onEvent(it)
                 }
               )
             }

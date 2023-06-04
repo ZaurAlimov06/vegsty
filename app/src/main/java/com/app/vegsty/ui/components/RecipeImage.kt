@@ -30,7 +30,8 @@ import com.skydoves.landscapist.glide.GlideImageState
 @Composable
 fun RecipeImage(
   imageUrl: String?,
-  onLoadImageAgainClick: () -> Unit
+  onLoadImageAgainClick: () -> Unit,
+  shape: RoundedCornerShape
 ) {
 
   val isImageLoading = remember {
@@ -49,10 +50,7 @@ fun RecipeImage(
       .fillMaxWidth()
       .height(140.dp)
       .clip(
-        shape = RoundedCornerShape(
-          topStart = 16.dp,
-          topEnd = 16.dp
-        )
+        shape = shape
       ),
     onImageStateChanged = {
       isImageLoading.value = when (it) {
