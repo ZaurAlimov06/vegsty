@@ -63,6 +63,15 @@
   <string name="add_goal_label_goal_date">Date</string>
   <string name="add_goal_button_add_goal">Add Goal</string>
 
+  <!--    Goal Detail Screen-->
+  <string name="goal_detail_title_text_goal_detail">Goal Detail</string>
+  <string name="goal_detail_label_goal_title">Title</string>
+  <string name="goal_detail_label_goal_protein">Protein</string>
+  <string name="goal_detail_label_goal_calorie">Calorie</string>
+  <string name="goal_detail_label_goal_fat">Fat</string>
+  <string name="goal_detail_label_goal_carbs">Carbs</string>
+  <string name="goal_detail_label_goal_date">Date</string>
+
   <!--    Favorites Screen-->
   <string name="favorites_title_text_favorites">Favorites</string>
 

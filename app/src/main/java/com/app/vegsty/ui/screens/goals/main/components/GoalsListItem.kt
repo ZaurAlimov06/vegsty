@@ -32,16 +32,26 @@ fun GoalListItem(
           onGoalClick(goal)
         }
       )
+      .padding(16.dp)
   ) {
 
     Text(
       text = goal?.title ?: "",
       textAlign = TextAlign.Start,
       modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 10.dp, vertical = 16.dp),
+        .fillMaxWidth(),
       style = MaterialTheme.typography.bodyLarge,
       color = DarkBackgroundColor
+    )
+
+    Text(
+      text = goal?.date ?: "",
+      textAlign = TextAlign.Start,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 4.dp),
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onBackground
     )
   }
 }

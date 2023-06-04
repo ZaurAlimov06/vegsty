@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.app.vegsty.data.remote.dto.Goal
 import com.app.vegsty.data.remote.dto.Recipe
 import com.app.vegsty.ui.components.BottomBar
 import com.app.vegsty.ui.route.NavigationType
@@ -40,6 +41,7 @@ import com.app.vegsty.ui.route.RouteArgument
 import com.app.vegsty.ui.screens.detail.DetailScreen
 import com.app.vegsty.ui.screens.favorites.FavoritesScreen
 import com.app.vegsty.ui.screens.favorites.FavoritesViewModel
+import com.app.vegsty.ui.screens.goals.detail.GoalDetailScreen
 import com.app.vegsty.ui.screens.goals.insert.GoalInsertScreen
 import com.app.vegsty.ui.screens.goals.insert.GoalInsertViewModel
 import com.app.vegsty.ui.screens.goals.main.GoalsScreen
@@ -392,6 +394,10 @@ class MainActivity : ComponentActivity() {
                   goalsInsertViewModel.onEvent(it)
                 }
               )
+            }
+
+            composable(Route.SCREEN_GOAL_DETAIL.name) { currentStackEntry ->
+              GoalDetailScreen(goal = currentStackEntry.savedStateHandle.get<Goal>(RouteArgument.ARG_GOAL_DETAIL.name))
             }
           }
         }

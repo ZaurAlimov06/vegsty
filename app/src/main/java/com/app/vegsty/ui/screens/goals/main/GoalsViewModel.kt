@@ -9,6 +9,7 @@ import com.app.vegsty.ui.model.UiEvent
 import com.app.vegsty.ui.repository.MainRepository
 import com.app.vegsty.ui.route.NavigationType
 import com.app.vegsty.ui.route.Route
+import com.app.vegsty.ui.route.RouteArgument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -75,7 +76,14 @@ class GoalsViewModel @Inject constructor(
 
   private fun onGoalClick(goal: Goal?) {
     viewModelScope.launch(ExceptionHandler.handler) {
-
+      _uiEvent.send(
+        UiEvent.Navigate(
+          navigationType = NavigationType.Navigate(Route.SCREEN_GOAL_DETAIL.name),
+          data = mapOf(
+            RouteArgument.ARG_GOAL_DETAIL.name to goal
+          )
+        )
+      )
     }
   }
 
